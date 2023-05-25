@@ -18,5 +18,4 @@
             Clients.Client(Context.ConnectionId)
                    .SendAsync("echo", name, $"{message} (echo from server)");
     }
-
 }
