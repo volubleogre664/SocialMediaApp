@@ -56,11 +56,6 @@
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
-        public string ReturnUrl { get; set; }
-
-        [TempData]
-        public string ErrorMessage { get; set; }
-
         [HttpPost]
         public async Task<IActionResult> Login(LoginInput model)
         {
@@ -74,7 +69,6 @@
                 }
 
                 var isPasswordCorrect = await this.signInManager.UserManager.CheckPasswordAsync(user, model.Password);
-
 
                 if (isPasswordCorrect)
                 {
@@ -133,7 +127,9 @@
 
             await this.signInManager.SignInAsync(user, isPersistent: false);
 
-            return this.Ok(new { email = user.Email, token = this.GetToken() });
+            var token = new JwtSecurityTokenHandler().WriteToken(this.GetToken());
+
+            return this.Ok(new { email = user.Email, token });
         }
 
         [HttpPost]
@@ -150,22 +146,6 @@
                 return this.RedirectToPage("Index");
             }
         }
-
-        /*public async Task OnGetAsync(string? returnUrl = null)
-        {
-            if (!string.IsNullOrEmpty(this.ErrorMessage))
-            {
-                this.ModelState.AddModelError(string.Empty, this.ErrorMessage);
-            }
-
-            returnUrl ??= this.Url.Content("~/");
-
-            await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
-            this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-
-            this.ReturnUrl = returnUrl;
-        }*/
 
         private AppUser CreateUser()
         {

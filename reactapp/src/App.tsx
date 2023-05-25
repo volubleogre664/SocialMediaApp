@@ -32,7 +32,7 @@ function App() {
                 })}
             </ul>
 
-            <Register title="My custom title" />
+            <Register />
         </div>
     );
 }
