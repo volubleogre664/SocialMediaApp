@@ -1,21 +1,32 @@
-namespace Webapi
+namespace SocialMediaApp
 {
     using FluentValidation;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
 
     using Webapi.Models.Inputs;
     using Webapi.Validators;
 
-    public class Program
+    using Webapi.Areas.Identity.Data;
+
+    public static class Program
     {
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            var configBuilder = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            var configuration = configBuilder.Build();
+
+            builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AuthDbContext>();
+
+            // Add services to the container.
+            builder.Services.AddControllers();
             // Add services to the container.
             builder.Services.AddScoped<IValidator<RegisterInput>, RegisterInputValidator>();
             builder.Services.AddScoped<IValidator<LoginInput>, LoginInputValidator>();
 
-            builder.Services.AddControllers();
+            builder.Services.AddDbContext<AuthDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("AuthDbContextConnection")));
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
