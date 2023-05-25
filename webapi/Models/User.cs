@@ -10,7 +10,7 @@
         public int UserId { get; set; }
 
         [Column("fkAuthUserId")]
-        public int AuthUserId { get; set; }
+        public string AuthUserId { get; set; }
 
         [NotNull]
         public string Username { get; set; }

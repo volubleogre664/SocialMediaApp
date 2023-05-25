@@ -43,6 +43,13 @@ namespace SocialMediaApp
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+
+                app.UseCors(_ =>
+                {
+                    _.AllowAnyHeader();
+                    _.AllowAnyMethod();
+                    _.AllowAnyOrigin();
+                });
             }
 
             app.UseHttpsRedirection();

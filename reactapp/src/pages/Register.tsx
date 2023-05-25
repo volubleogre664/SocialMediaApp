@@ -1,8 +1,12 @@
-import { Button } from "@mui/material";
+import { useEffect } from "react";
+import { Button, FormControl } from "@mui/material";
 import useForm from "../hooks/useForm";
 import useFetch from "../hooks/useFetch";
 
-import { FetchResults } from "../utils/Types";
+import { FetchResults } from "utils/Types";
+
+import "../styles/pages/Register.css";
+import { Link } from "react-router-dom";
 
 type FormValues = {
     email: string;
@@ -22,7 +26,7 @@ function Register() {
         confirmPassword: "",
     });
 
-    const { loading, error, fetchData }: FetchResults =
+    const { loading, error, fetchData, response }: FetchResults =
         useFetch<RegisterResponse>({
             url: "REGISTER",
             method: "POST",
@@ -33,52 +37,65 @@ function Register() {
             },
         });
 
-    function formSubmit(event: any) {
-        event.preventDefault();
-
+    function formSubmit() {
         fetchData();
 
         console.log("Form submitted", values);
     }
+
+    useEffect(() => {
+        if (response) {
+            console.log("Response", response);
+        }
+    }, [response]);
 
     return (
         <div className="register">
             <h1>Register User</h1>
 
             <form onSubmit={onSubmit}>
-                <label htmlFor="username">Username</label>
-                <input
-                    type="text"
-                    name="username"
-                    id="username"
-                    value={values.email}
-                    onChange={onChange}
-                />
-                <br />
+                <FormControl>
+                    <label htmlFor="username">Username</label>
+                    <input
+                        type="text"
+                        name="email"
+                        id="username"
+                        value={values.email}
+                        onChange={onChange}
+                    />
+                </FormControl>
 
-                <label htmlFor="password">Password</label>
-                <input
-                    value={values.password}
-                    onChange={onChange}
-                    type="password"
-                    name="password"
-                    id="password"
-                />
-                <br />
+                <FormControl>
+                    <label htmlFor="password">Password</label>
+                    <input
+                        value={values.password}
+                        onChange={onChange}
+                        type="password"
+                        name="password"
+                        id="password"
+                    />
+                </FormControl>
 
-                <label htmlFor="confirmPassword">Confirm Password</label>
-                <input
-                    type="password"
-                    name="confirmPassword"
-                    id="confirmPassword"
-                    value={values.confirmPassword}
-                    onChange={onChange}
-                />
-                <br />
+                <FormControl>
+                    <label htmlFor="confirmPassword">Confirm Password</label>
+                    <input
+                        type="password"
+                        name="confirmPassword"
+                        id="confirmPassword"
+                        value={values.confirmPassword}
+                        onChange={onChange}
+                    />
+                </FormControl>
 
                 <Button variant="contained" type="submit">
                     Register
                 </Button>
+
+                <footer>
+                    <small>
+                        Already have an account? <Link to="/login">Login</Link>
+                    </small>
+                </footer>
             </form>
         </div>
     );

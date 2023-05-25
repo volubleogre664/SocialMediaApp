@@ -3,7 +3,9 @@ import { FetchData } from "../utils/Types";
 import API_ENDPOINTS from "../utils/ApiRoutes";
 
 function useFetch<T>(data: FetchData) {
-    const { url, method, body } = data;
+    const { method, body } = data;
+
+    const url = API_ENDPOINTS[data.url];
 
     const [response, setResponse] = useState<T | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -13,14 +15,14 @@ function useFetch<T>(data: FetchData) {
         setLoading(true);
 
         try {
-            const res = await fetch(API_ENDPOINTS[url] as string, {
+            const res = await fetch(url, {
                 method,
+                body: JSON.stringify(body),
                 headers: {
                     "Content-Type": "application/json",
                     Authorization:
                         "Bearer " + localStorage.getItem("token") ?? "",
                 },
-                body: JSON.stringify(body),
             });
 
             const json = await res.json();
