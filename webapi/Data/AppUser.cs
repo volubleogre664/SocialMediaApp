@@ -1,4 +1,4 @@
-﻿namespace Webapi.Areas.Identity.Data
+﻿namespace Webapi.Data
 {
     using System;
     using System.Collections.Generic;

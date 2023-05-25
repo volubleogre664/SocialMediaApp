@@ -22,7 +22,7 @@ namespace Webapi.Areas.Identity.Pages.Account
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.AspNetCore.WebUtilities;
     using Microsoft.Extensions.Logging;
-    using Webapi.Areas.Identity.Data;
+    using Webapi.Data;
 
     public class RegisterModel : PageModel
     {

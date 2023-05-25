@@ -11,8 +11,7 @@ namespace Webapi.Areas.Identity.Pages.Account
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.Extensions.Logging;
-
-    using Webapi.Areas.Identity.Data;
+    using Webapi.Data;
 
     public class LogoutModel : PageModel
     {

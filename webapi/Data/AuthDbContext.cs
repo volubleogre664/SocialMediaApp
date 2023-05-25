@@ -1,10 +1,8 @@
-﻿namespace Webapi.Areas.Identity.Data
+﻿namespace Webapi.Data
 {
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
-
-    using Webapi.Areas.Identity.Data;
 
     public class AuthDbContext : IdentityDbContext<AppUser>
     {
