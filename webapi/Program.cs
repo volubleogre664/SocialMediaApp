@@ -3,6 +3,9 @@ namespace Webapi
     using Microsoft.Extensions.Azure;
     using Microsoft.Extensions.DependencyInjection;
 
+    using Webapi.Interfaces;
+    using Webapi.Services;
+
     public static class Program
     {
         private static void Main(string[] args)
@@ -25,6 +28,8 @@ namespace Webapi
                 clientBuilder.AddBlobServiceClient(config.GetConnectionString("StorageConnectionString:blob"), preferMsi: true);
                 clientBuilder.AddQueueServiceClient(config.GetConnectionString("StorageConnectionString:queue"), preferMsi: true);
             });
+
+            builder.Services.AddScoped<IBlobStorageService, BlobStorageService>();
 
             var app = builder.Build();
 
