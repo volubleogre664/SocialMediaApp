@@ -8,7 +8,7 @@
     {
         public CommentValidator()
         {
-            this.RuleFor(_ => _.UserId)
+            this.RuleFor(_ => _.UserID)
                 .NotNull();
 
             this.RuleFor(_ => _.Text)
