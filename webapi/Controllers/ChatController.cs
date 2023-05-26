@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace Webapi.Controllers
+﻿namespace Webapi.Controllers
 {
-    public class ChatController : Controller
+    using Microsoft.AspNetCore.Mvc;
+
+    [ApiController]
+    [Route("/api/[controller]/[action]")]
+    public class ChatController : ControllerBase
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+
     }
 }
