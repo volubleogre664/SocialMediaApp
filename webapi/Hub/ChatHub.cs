@@ -17,7 +17,7 @@
         {
             await Clients.All.SendAsync("messageReceived", user, message);
 
-            var chat = new Chat()
+/*            var chat = new Chat()
             {
                 Id = 1,
                 fkRecievingUserId = 1,
@@ -26,7 +26,7 @@
                 Text = message,
             };
 
-            this.chatService.SaveChat(chat);
+            this.chatService.SaveChat(chat);*/
         }
 
         public Task BroadcastMessage(string name, string message) =>
