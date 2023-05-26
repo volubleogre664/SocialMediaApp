@@ -6,14 +6,9 @@
 
     public class ChatService : GenericService<Chat>, IChatService
     {
-        public ChatService(ApplicationDbContext context) 
+        public ChatService(ApplicationDbContext context)
             : base(context)
         {
-        }
-
-        public void SaveChat(Chat entity)
-        {
-            Console.WriteLine(entity);
         }
     }
 }
