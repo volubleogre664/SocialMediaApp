@@ -12,12 +12,10 @@
     public class ChatHub : Hub
     {
         private readonly IChatService chatService;
-        private readonly ApplicationDbContext context;
 
-        public ChatHub(IChatService chatService, ApplicationDbContext context)
+        public ChatHub(IChatService chatService)
         {
             this.chatService = chatService;
-            this.context = context;
         }
 
         public async Task NewMessage(string user, string message)
