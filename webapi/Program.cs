@@ -1,7 +1,7 @@
 namespace SocialMediaApp
 {
     using System.Text;
-
+    using Azure.Storage.Blobs.Models;
     using FluentValidation;
 
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -42,7 +42,9 @@ namespace SocialMediaApp
             builder.Services.AddScoped<IValidator<LoginInput>, LoginInputValidator>();
             builder.Services.AddScoped<IValidator<UserDataInput>, UserDataInputValidator>();
 
+            builder.Services.AddScoped<IChatService, ChatService>();
             builder.Services.AddScoped<IUserService, UserService>();
+
             builder.Services.AddSignalR().AddAzureSignalR();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
