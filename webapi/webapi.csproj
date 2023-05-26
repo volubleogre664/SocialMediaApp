@@ -4,8 +4,20 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>fa384497-3bbf-4d5f-93e1-7deff66f42a7</UserSecretsId>
 		<UserSecretsId>SignalRChatRoomEx</UserSecretsId>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Areas\**" />
+	  <Compile Remove="Pages\**" />
+	  <Content Remove="Areas\**" />
+	  <Content Remove="Pages\**" />
+	  <EmbeddedResource Remove="Areas\**" />
+	  <EmbeddedResource Remove="Pages\**" />
+	  <None Remove="Areas\**" />
+	  <None Remove="Pages\**" />
+	</ItemGroup>
 	
 	<ItemGroup>
 		<None Include="..\.editorconfig" Link=".editorconfig" />
@@ -13,7 +25,18 @@
 
 	<ItemGroup>
 		<AdditionalFiles Include="stylecop.json" />
-		<PackageReference Include="Microsoft.Azure.SignalR" Version="1.21.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.6" />
+		<PackageReference Include="FluentValidation" Version="11.5.2" />
+		<PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.2" />
 		
 		<PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
