@@ -42,6 +42,8 @@ namespace SocialMediaApp
             builder.Services.AddScoped<IValidator<UserDataInput>, UserDataInputValidator>();
 
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IPostService, PostService>();
+            builder.Services.AddScoped<ICommentService, CommentService>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
