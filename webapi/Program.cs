@@ -11,6 +11,7 @@ namespace SocialMediaApp
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
     using Webapi.Data;
+    using Webapi.Hub;
     using Webapi.Interfaces;
     using Webapi.Models.Inputs;
     using Webapi.Services;
@@ -42,6 +43,7 @@ namespace SocialMediaApp
             builder.Services.AddScoped<IValidator<UserDataInput>, UserDataInputValidator>();
 
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddSignalR().AddAzureSignalR();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
