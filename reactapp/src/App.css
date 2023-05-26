@@ -1,5 +1,4 @@
 .app {
-    background-color: #000;
-    color: #fff;
-    padding: 40px;
+    display: flex;
+    flex-direction: column;
 }
