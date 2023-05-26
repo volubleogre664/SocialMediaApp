@@ -1,12 +1,18 @@
 ﻿namespace Webapi.Models
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public class Chat
     {
-        public int Id { get; set; }
+        [Key]
+        public int ChatId { get; set; }
 
-        public int fkUserId { get; set; }
+        [Column("fkAuthUserId")]
+        public string AuthUserId { get; set; }
 
-        public int fkRecievingUserId { get; set; }
+        [Column("fkRecievingUserId")]
+        public string RecievingAuthUserId { get; set; }
 
         public string Text { get; set; }
 

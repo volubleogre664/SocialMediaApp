@@ -4,14 +4,18 @@
 
     using Microsoft.AspNetCore.SignalR;
 
+    using Webapi.Interfaces;
     using Webapi.Models;
     using Webapi.Services;
 
     public class ChatHub : Hub
     {
-        private readonly ChatService chatService;
+        private readonly IChatService chatService;
 
-        public ChatHub() { }
+        public ChatHub(IChatService chatService)
+        {
+            this.chatService = chatService;
+        }
 
         public async Task NewMessage(string user, string message)
         {
