@@ -1,13 +1,21 @@
-using webapi.Hub;
-using webapi.Services;
-
-internal class Program
+namespace Webapi
 {
-    private static void Main(string[] args)
+    using Microsoft.Extensions.Azure;
+    using Microsoft.Extensions.DependencyInjection;
+
+    using webapi.Hub;
+    using Webapi.Interfaces;
+    using Webapi.Services;
+    
+    public static class Program
     {
+        private static void Main(string[] args)
+        {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .Build();
 
         builder.Services.AddControllers();
 
@@ -18,7 +26,15 @@ internal class Program
         builder.Services.AddSignalR().AddAzureSignalR();
         builder.Services.AddScoped<ChatService>();
 
-        var app = builder.Build();
+            builder.Services.AddAzureClients(clientBuilder =>
+            {
+                clientBuilder.AddBlobServiceClient(config.GetConnectionString("StorageConnectionString:blob"), preferMsi: true);
+                clientBuilder.AddQueueServiceClient(config.GetConnectionString("StorageConnectionString:queue"), preferMsi: true);
+            });
+
+            builder.Services.AddScoped<IBlobStorageService, BlobStorageService>();
+
+            var app = builder.Build();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
