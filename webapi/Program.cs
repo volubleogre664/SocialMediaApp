@@ -8,6 +8,7 @@ namespace SocialMediaApp
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Azure;
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
     using Webapi.Data;
@@ -98,6 +99,14 @@ namespace SocialMediaApp
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SECRET"] !)),
                 };
             });
+
+            builder.Services.AddAzureClients(clientBuilder =>
+            {
+                clientBuilder.AddBlobServiceClient(configuration.GetConnectionString("StorageConnectionString:blob"), preferMsi: true);
+                clientBuilder.AddQueueServiceClient(configuration.GetConnectionString("StorageConnectionString:queue"), preferMsi: true);
+            });
+
+            builder.Services.AddScoped<IBlobStorageService, BlobStorageService>();
 
             var app = builder.Build();
 
