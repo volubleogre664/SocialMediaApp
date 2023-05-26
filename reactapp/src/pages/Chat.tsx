@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-// import Connector from "../signalr-connection";
+import Connector from "../signalr-connection";
 import { Button } from "@mui/material";
 import Contact from "../components/Contact";
 import Message from "../components/Message";
@@ -7,7 +7,7 @@ import Message from "../components/Message";
 import "../styles/pages/Chat.css";
 
 function Chat() {
-    // const { newMessage, events } = Connector();
+    const { newMessage, events } = Connector();
     const [message, setMessage] = useState("");
     // const [name, setName] = useState("");
 
@@ -135,6 +135,7 @@ function Chat() {
                                     fontWeight: "bold",
                                 }}
                                 type="submit"
+                                onClick={() => newMessage(message)}
                             >
                                 Send
                             </Button>
