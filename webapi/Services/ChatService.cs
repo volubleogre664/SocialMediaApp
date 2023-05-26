@@ -1,6 +1,6 @@
-﻿namespace webapi.Services
+﻿namespace Webapi.Services
 {
-    using webapi.Models;
+    using Webapi.Models;
 
     public class ChatService
     {

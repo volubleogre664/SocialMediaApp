@@ -1,11 +1,11 @@
-﻿namespace webapi.Hub
+﻿namespace Webapi.Hub
 {
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.SignalR;
 
-    using webapi.Models;
-    using webapi.Services;
+    using Webapi.Models;
+    using Webapi.Services;
 
     public class ChatHub : Hub
     {

@@ -1,4 +1,4 @@
-﻿namespace webapi.Models
+﻿namespace Webapi.Models
 {
     public class Chat
     {
