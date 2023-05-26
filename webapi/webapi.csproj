@@ -5,6 +5,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>fa384497-3bbf-4d5f-93e1-7deff66f42a7</UserSecretsId>
+		<UserSecretsId>SignalRChatRoomEx</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -27,6 +28,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.5" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.5" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.5" />
+		<PackageReference Include="Microsoft.Azure.SignalR" Version="1.21.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
 		  <PrivateAssets>all</PrivateAssets>
@@ -50,6 +52,11 @@
 		<PackageReference Include="Azure.Storage.Files.Shares" Version="12.1.0" />
 		<PackageReference Include="Azure.Storage.Queues" Version="12.11.1" />
 		<PackageReference Include="Microsoft.Extensions.Azure" Version="1.5.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+		<DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.2" />
 	</ItemGroup>
 
 </Project>

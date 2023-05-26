@@ -11,6 +11,7 @@ namespace SocialMediaApp
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
     using Webapi.Data;
+    using Webapi.Hub;
     using Webapi.Interfaces;
     using Webapi.Models.Inputs;
     using Webapi.Services;
@@ -44,6 +45,8 @@ namespace SocialMediaApp
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IPostService, PostService>();
             builder.Services.AddScoped<ICommentService, CommentService>();
+
+            builder.Services.AddSignalR().AddAzureSignalR();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -102,18 +105,24 @@ namespace SocialMediaApp
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-
-                app.UseCors(_ =>
-                {
-                    _.AllowAnyHeader();
-                    _.AllowAnyMethod();
-                    _.AllowAnyOrigin();
-                });
+                app.UseCors(x => x
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .SetIsOriginAllowed(origin => true) // allow any origin
+                    .AllowCredentials()); // allow credentials
             }
 
-            app.UseHttpsRedirection();
-
+            app.UseRouting();
             app.UseAuthorization();
+            app.UseFileServer();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<ChatHub>("/chat");
+
+            });
+
+            app.UseHttpsRedirection();
 
             app.MapControllers();
 
