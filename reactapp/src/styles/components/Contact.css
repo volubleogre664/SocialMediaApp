@@ -1,0 +1,22 @@
+.contact {
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
+}
+
+.contact:hover {
+    transition: all ease-in-out 0.2s;
+    cursor: pointer;
+    background-color: #f5f5f5;
+}
+
+.contact__main {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.contact__main p {
+    font-weight: 500;
+}
