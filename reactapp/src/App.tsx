@@ -23,7 +23,7 @@ const router = createBrowserRouter([
         element: <WrapperComponent Component={Login} />,
     },
     {
-        path: "/chat",
+        path: "/Chat",
         element: <WrapperComponent Component={Chat} />,
     },
 ]);
