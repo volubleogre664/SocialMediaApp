@@ -12,8 +12,8 @@ const URLS: ApiRoutes = {
 
 // Apply proxy to add baseUrl to all endpoints
 const API_ENDPOINTS = new Proxy(URLS, {
-    get: function (target, property) {
-        return baseUrl + target[property as keyof ApiRoutes];
+    get: function (target, property: string) {
+        return baseUrl + target[property];
     },
 });
 

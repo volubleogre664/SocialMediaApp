@@ -30,11 +30,7 @@ function Register() {
         useFetch<RegisterResponse>({
             url: "REGISTER",
             method: "POST",
-            body: {
-                email: values.email,
-                password: values.password,
-                confirmPassword: values.confirmPassword,
-            },
+            body: values,
         });
 
     function formSubmit() {
@@ -55,11 +51,11 @@ function Register() {
 
             <form onSubmit={onSubmit}>
                 <FormControl>
-                    <label htmlFor="username">Username</label>
+                    <label htmlFor="username">Email</label>
                     <input
                         type="text"
                         name="email"
-                        id="username"
+                        id="email"
                         value={values.email}
                         onChange={onChange}
                     />

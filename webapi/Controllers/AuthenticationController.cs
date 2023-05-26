@@ -72,7 +72,7 @@
 
                 if (isPasswordCorrect)
                 {
-                    await this.signInManager.SignInAsync(user, model.RememberMe);
+                    await this.signInManager.SignInAsync(user, true);
                 }
                 else
                 {

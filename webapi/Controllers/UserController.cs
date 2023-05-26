@@ -39,7 +39,7 @@
                 return this.BadRequest(this.ModelState);
             }
 
-            /*var authUserId = this.signInManager.UserManager.GetUserId(this.User);
+            var authUserId = this.signInManager.UserManager.GetUserId(this.User);
 
             if (authUserId == null)
             {
@@ -55,7 +55,7 @@
                 AvatarUrl = model.AvatarUrl,
             };
 
-            this.userService.Add(user);*/
+            this.userService.Add(user);
 
             return this.Ok(model);
         }
