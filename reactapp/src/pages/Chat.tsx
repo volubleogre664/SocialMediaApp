@@ -20,8 +20,6 @@ type ChatResponse = {
 function Chat() {
     const { newMessage, events } = Connector();
     const [message, setMessage] = useState("");
-    const examples = ["1", "2", "3"];
-   // const [chatHistory, setChatHistory] = useState([]);
 
     const { loading, error, fetchData, response }: FetchResults =
         useFetch<ChatResponse[]>({
@@ -46,7 +44,7 @@ function Chat() {
 
     function formSubmit(e: any) {
         e.preventDefault();
-        var newChat = { text: message, date: "28/05/2023" };
+        var newChat = { text: message, date: new Date().toLocaleTimeString() };
         console.log("Form submitted", message);
         response.push(newChat);
 
@@ -85,6 +83,11 @@ function Chat() {
                         <h1>Chat</h1>
                     </header>
 
+                    <span>
+                        message from signalR:{message}
+                        <span style={{ color: "green" }}>{message}</span>{" "}
+                    </span>
+
                     {(() => {
                         if (response) {
                             return (
@@ -104,34 +107,6 @@ function Chat() {
                             )
                         }
                     })()}
-
-                   {/* <main className="chat__messages">
-                        <Message
-                            isMine={false}
-                            timestamp={new Date().toLocaleTimeString()}
-                            message="Hy"
-                        />
-                        <Message
-                            isMine={true}
-                            timestamp={new Date().toLocaleTimeString()}
-                            message="How are you"
-                        />
-                        <Message
-                            isMine={false}
-                            timestamp={new Date().toLocaleTimeString()}
-                            message="I'm good how are you?"
-                        />
-                        <Message
-                            isMine={true}
-                            timestamp={new Date().toLocaleTimeString()}
-                            message="I'm alright"
-                        />
-                        <Message
-                            isMine={true}
-                            timestamp={new Date().toLocaleTimeString()}
-                            message="So what do you want"
-                        />
-                    </main>*/}
 
                     <footer className="chat__footer">
                         <form onSubmit={formSubmit}>
