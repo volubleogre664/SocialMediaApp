@@ -1,7 +1,8 @@
 type FetchData = {
     url: string;
     method: string;
-    body: object;
+    body?: object;
+    query?: string;
 };
 
 type FetchResults = {

@@ -8,6 +8,7 @@ type ApiRoutes = {
 const URLS: ApiRoutes = {
     LOGIN: "/api/auth/login",
     REGISTER: "/api/auth/register",
+    CHAT: "/api/Chat"
 };
 
 // Apply proxy to add baseUrl to all endpoints

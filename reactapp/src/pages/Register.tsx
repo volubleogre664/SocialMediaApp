@@ -30,7 +30,7 @@ function Register() {
         useFetch<RegisterResponse>({
             url: "REGISTER",
             method: "POST",
-            body: values,
+            body: values
         });
 
     function formSubmit() {
