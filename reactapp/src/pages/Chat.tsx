@@ -10,9 +10,9 @@ import Message from "../components/Message";
 import "../styles/pages/Chat.css";
 
 type ChatResponse = {
-    chatId: number,
-    authUserId: string,
-    recievingAuthUserId: string,
+    chatId?: number,
+    authUserId?: string,
+    recievingAuthUserId?: string,
     text: string,
     date: Date
 };
@@ -20,21 +20,9 @@ type ChatResponse = {
 function Chat() {
     const { newMessage, events } = Connector();
     const [message, setMessage] = useState("");
+    const examples = ["1", "2", "3"];
    // const [chatHistory, setChatHistory] = useState([]);
 
-    // const [name, setName] = useState("");
-
-/*    const fetchChatHistory = async () => {
-        const { data } = await Axios.get(
-            "https://localhost:7285/api/Chat?userId=EX100"
-        );
-        const chatHistory = data;
-        setChatHistory(chatHistory);
-        console.log(chatHistory);
-    };
-*/
-    
-    
     const { loading, error, fetchData, response }: FetchResults =
         useFetch<ChatResponse[]>({
             url: "CHAT",
@@ -58,15 +46,13 @@ function Chat() {
 
     function formSubmit(e: any) {
         e.preventDefault();
+        var newChat = { text: message, date: "28/05/2023" };
 
         console.log("Form submitted", message);
+        response.push(newChat);
 
         setMessage("");
     }
-
-    // useEffect(() => {
-    //     events((_, message) => setMessage(message));
-    // });
 
     return (
         <div className="chat">
@@ -100,7 +86,27 @@ function Chat() {
                         <h1>Chat</h1>
                     </header>
 
-                    <main className="chat__messages">
+                    {(() => {
+                        if (response) {
+                            return (
+                                <main className="chat__messages">
+                                    {response.map((chat: ChatResponse) => (
+                                        <Message
+                                            isMine={false}
+                                            timestamp={(chat.date).toString()}
+                                            message={chat.text}
+                                        />
+                                    ))}
+                                </main>
+                            )
+                        } else {
+                            return (
+                                <h4> Messages Loading... </h4>
+                            )
+                        }
+                    })()}
+
+                   {/* <main className="chat__messages">
                         <Message
                             isMine={false}
                             timestamp={new Date().toLocaleTimeString()}
@@ -126,7 +132,7 @@ function Chat() {
                             timestamp={new Date().toLocaleTimeString()}
                             message="So what do you want"
                         />
-                    </main>
+                    </main>*/}
 
                     <footer className="chat__footer">
                         <form onSubmit={formSubmit}>
