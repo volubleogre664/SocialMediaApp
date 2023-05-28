@@ -47,7 +47,6 @@ function Chat() {
     function formSubmit(e: any) {
         e.preventDefault();
         var newChat = { text: message, date: "28/05/2023" };
-
         console.log("Form submitted", message);
         response.push(newChat);
 
