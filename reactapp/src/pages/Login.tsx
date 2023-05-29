@@ -1,43 +1,60 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Loader from "../components/Loader";
 import useForm from "../hooks/useForm";
-import { FetchResults } from "../utils/Types";
 import useFetch from "../hooks/useFetch";
+import { useUser } from "../hooks/stateHooks";
+import { FetchResults, UserState } from "../utils/Types";
 
 import "../styles/pages/Login.css";
-
 type FormValues = {
     email: string;
     password: string;
 };
 
+type LoginResponse = {
+    token: string;
+    user: UserState;
+};
+
 function Login() {
+    const { dispatch } = useUser();
+    const navigate = useNavigate();
     const { onChange, onSubmit, values } = useForm<FormValues>(formSubmit, {
         email: "",
         password: "",
     });
 
-    const { loading, error, fetchData, response }: FetchResults = useFetch({
-        url: "LOGIN",
-        method: "POST",
-        body: values,
-    });
+    const { loading, error, fetchData, response }: FetchResults =
+        useFetch<LoginResponse>({
+            url: "LOGIN",
+            method: "POST",
+            body: values,
+        });
 
     function formSubmit() {
         fetchData();
-
-        console.log("Form submitted", values);
     }
 
     useEffect(() => {
         if (response) {
-            console.log("Response", response);
+            localStorage.setItem("token", response.token);
+            localStorage.setItem("auth", response.user.authUserId);
+
+            dispatch({
+                type: "setUser",
+                payload: response.user,
+            });
+
+            navigate("/user-profile");
         }
-    }, [response]);
+    }, [response, dispatch, navigate]);
 
     return (
         <div className="login">
             <main className="login__body">
+                {loading && <Loader />}
                 <h1>Login</h1>
 
                 <form onSubmit={onSubmit}>

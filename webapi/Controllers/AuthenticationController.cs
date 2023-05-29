@@ -85,8 +85,9 @@
                 this.logger.LogInformation("User logged in.");
 
                 var token = new JwtSecurityTokenHandler().WriteToken(this.GetToken());
+                var userData = this.userService.FindByField("AuthUserId", user.Id);
 
-                return this.Ok(new { user = string.Empty, token });
+                return this.Ok(new { user = userData, token });
             }
 
             return this.BadRequest(new { message = "Invalid Login Attempt" });
@@ -129,7 +130,7 @@
 
             var token = new JwtSecurityTokenHandler().WriteToken(this.GetToken());
 
-            return this.Ok(new { email = user.Email, token });
+            return this.Ok(new { authUserId = user.Id, token });
         }
 
         [HttpPost]
