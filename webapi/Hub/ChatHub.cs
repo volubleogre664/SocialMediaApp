@@ -29,12 +29,14 @@
         public async Task NewMessage(string user, string message)
         {
 
-            Console.WriteLine(Clients.Client(Context.ConnectionId));
-            Console.WriteLine(Clients.Client(Context.UserIdentifier));
-            Clients.All.SendAsync("broadcastMessage", user, message);
+            Clients.User(user).SendAsync("ReceiveMessage", message);
+            /*
+                        Console.WriteLine(Clients.Client(Context.ConnectionId));
+                        Console.WriteLine(Clients.Client(Context.UserIdentifier));
+                        Clients.All.SendAsync("broadcastMessage", user, message);
 
-            await Clients.All.SendAsync("messageReceived", user, message);
-
+                        await Clients.All.SendAsync("messageReceived", user, message);
+            */
 
             // await Clients.Client(Context.ConnectionId)
 
@@ -62,5 +64,10 @@
         public async Task Echo(string name, string message) =>
             Clients.Client(Context.ConnectionId)
                    .SendAsync("echo", name, $"{message} (echo from server)");
+
+        public Task SendPrivateMessage(string user, string message)
+        {
+            return Clients.User(user).SendAsync("ReceiveMessage", message);
+        }
     }
 }
