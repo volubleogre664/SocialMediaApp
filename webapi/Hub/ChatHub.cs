@@ -13,17 +13,17 @@
     public class ChatHub : Hub
     {
         private readonly IChatService chatService;
-        private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly AuthDbContext authContext;
+/*        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly AuthDbContext authContext;*/
 
         public ChatHub(
-            IChatService chatService,
-            IHttpContextAccessor httpContextAccessor,
-            AuthDbContext authContext)
+            IChatService chatService
+   /*         IHttpContextAccessor httpContextAccessor,
+            AuthDbContext authContext*/)
         {
             this.chatService = chatService;
-            this.httpContextAccessor = httpContextAccessor;
-            this.authContext = authContext;
+            /*this.httpContextAccessor = httpContextAccessor;
+            this.authContext = authContext;*/
         }
 
         public async Task NewMessage(string user, string message)

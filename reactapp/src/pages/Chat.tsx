@@ -83,11 +83,6 @@ function Chat() {
                         <h1>Chat</h1>
                     </header>
 
-                    <span>
-                        message from signalR:{message}
-                        <span style={{ color: "green" }}>{message}</span>{" "}
-                    </span>
-
                     {(() => {
                         if (response) {
                             return (

@@ -3,9 +3,11 @@ import * as signalR from "@microsoft/signalr";
 const URL = process.env.HUB_ADDRESS ?? "https://localhost:7285/chat"; //or whatever your backend port is
 
 class Connector {
+
     private connection: signalR.HubConnection;
     public events: (onMessageReceived: (username: string, message: string) => void) => void;
     static instance: Connector;
+
     constructor() {
         this.connection = new signalR.HubConnectionBuilder()
             .withUrl(URL)
