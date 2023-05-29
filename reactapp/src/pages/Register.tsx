@@ -1,12 +1,17 @@
 import { useEffect } from "react";
+
 import { Button, FormControl } from "@mui/material";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+import Loader from "components/Loader";
+
 import useForm from "../hooks/useForm";
 import useFetch from "../hooks/useFetch";
 
 import { FetchResults } from "utils/Types";
 
 import "../styles/pages/Register.css";
-import { Link } from "react-router-dom";
 
 type FormValues = {
     email: string;
@@ -16,7 +21,7 @@ type FormValues = {
 
 type RegisterResponse = {
     token: string;
-    email: string;
+    authUserId: string;
 };
 
 function Register() {
@@ -25,6 +30,8 @@ function Register() {
         password: "",
         confirmPassword: "",
     });
+
+    const navigate = useNavigate();
 
     const { loading, error, fetchData, response }: FetchResults =
         useFetch<RegisterResponse>({
@@ -35,18 +42,21 @@ function Register() {
 
     function formSubmit() {
         fetchData();
-
-        console.log("Form submitted", values);
     }
 
     useEffect(() => {
         if (response) {
-            console.log("Response", response);
+            localStorage.setItem("token", response.token);
+            localStorage.setItem("auth", response.authUserId);
+
+            navigate("/finish-register");
         }
-    }, [response]);
+    }, [response, navigate]);
 
     return (
         <div className="register">
+            {loading && <Loader />}
+
             <h1>Register User</h1>
 
             <form onSubmit={onSubmit}>
