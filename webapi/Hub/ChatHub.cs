@@ -28,9 +28,18 @@
 
         public async Task NewMessage(string user, string message)
         {
+
+            Console.WriteLine(Clients.Client(Context.ConnectionId));
+            Console.WriteLine(Clients.Client(Context.UserIdentifier));
+            Clients.All.SendAsync("broadcastMessage", user, message);
+
             await Clients.All.SendAsync("messageReceived", user, message);
-/*            var userEmail = this.httpContextAccessor.HttpContext!.User.Identity!.Name;
-            var authUser = this.authContext.Users.FirstOrDefault(_ => _.Email == userEmail);*/
+
+
+            // await Clients.Client(Context.ConnectionId)
+
+            /*            var userEmail = this.httpContextAccessor.HttpContext!.User.Identity!.Name;
+                        var authUser = this.authContext.Users.FirstOrDefault(_ => _.Email == userEmail);*/
 
             var chat = new Chat()
             {
@@ -43,10 +52,14 @@
             this.chatService.Add(chat);
         }
 
-        public Task BroadcastMessage(string name, string message) =>
+        public async Task BroadcastMessage(string name, string message)
+        {
+            Console.WriteLine(Clients.Client(Context.ConnectionId));
+            Console.WriteLine(Clients.Client(Context.UserIdentifier));
             Clients.All.SendAsync("broadcastMessage", name, message);
+        }
 
-        public Task Echo(string name, string message) =>
+        public async Task Echo(string name, string message) =>
             Clients.Client(Context.ConnectionId)
                    .SendAsync("echo", name, $"{message} (echo from server)");
     }
