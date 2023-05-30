@@ -41,7 +41,7 @@ class Connector {
     }
 
     public JoinGroup = (groupName: string) => {
-        this.connection.send("JoinGroup",groupName).then(x => console.log("groupjoined"));
+        this.connection.send("JoinGroup", groupName).then(x => console.log("groupjoined:" + groupName));
     }
     //Sends a message to the ChatHub
 

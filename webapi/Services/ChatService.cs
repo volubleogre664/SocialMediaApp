@@ -15,12 +15,12 @@
             this.context = context;
         }
 
-        public async Task<object> AddChat(Chat entity)
+        public async Task<Chat> AddChat(Chat entity)
         {
             this.context.Chats.Add(entity);
             this.context.SaveChanges();
 
-            return JsonConvert.SerializeObject(entity);
+            return entity;
         }
     }
 }

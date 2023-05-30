@@ -4,6 +4,6 @@
 
     public interface IChatService : IGenericService<Chat>
     {
-        public Task<object> AddChat(Chat entity);
+        public Task<Chat> AddChat(Chat entity);
     }
 }

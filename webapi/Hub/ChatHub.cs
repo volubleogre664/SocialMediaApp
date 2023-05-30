@@ -38,7 +38,17 @@
             var chat = JsonConvert.DeserializeObject<Chat>(message);
             var savedChat = await this.chatService.AddChat(chat);
 
-            await Clients.Group(groupName).SendAsync("Send", savedChat);
+            var chatResponse = new ChatResponse()
+            {
+                chatId = savedChat.ChatId,
+                authUserId = savedChat.AuthUserId,
+                recievingAuthUserId = savedChat.RecievingAuthUserId,
+                text = savedChat.Text,
+            };
+
+            var chatResponseJson = JsonConvert.SerializeObject(chatResponse);
+
+            await Clients.Group(groupName).SendAsync("Send", chatResponseJson);
         }
 
 /*        public override System.Threading.Tasks.Task OnConnectedAsync()
