@@ -18,5 +18,5 @@
         "jsx": "react-jsx",
         "types": ["node"]
     },
-    "include": ["src", "src/setupProxy.js"]
+    "include": ["src", "src/setupProxy.js", "src/assets/*.jpg"]
 }

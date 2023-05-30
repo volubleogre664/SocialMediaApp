@@ -8,6 +8,7 @@ type ApiRoutes = {
 const URLS: ApiRoutes = {
     LOGIN: "/api/auth/login",
     REGISTER: "/api/auth/register",
+    FINALIZE_REGISTER: "/api/user/post",
     CHAT: "/api/Chat"
 };
 

@@ -10,6 +10,7 @@ function Header() {
             <nav className="header__nav">
                 <NavLink to="/" text="Home" />
                 <NavLink to="/chat" text="Chat" />
+                <NavLink to="/user-profile" text="Profile" />
                 <NavLink to="/login" text="Login" />
                 <NavLink to="/register" text="Register" />
             </nav>

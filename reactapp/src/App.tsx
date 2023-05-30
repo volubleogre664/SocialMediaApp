@@ -4,6 +4,8 @@ import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Chat from "./pages/Chat";
+import UserProfile from "./pages/UserProfile";
+import FinishRegister from "pages/FinishRegister";
 
 import Header from "./components/Header";
 import Search from "components/Search";
@@ -26,6 +28,14 @@ const router = createBrowserRouter([
     {
         path: "/Chat",
         element: <WrapperComponent Component={Chat} />,
+    },
+    {
+        path: "/user-profile",
+        element: <WrapperComponent Component={UserProfile} />,
+    },
+    {
+        path: "/finish-register",
+        element: <WrapperComponent Component={FinishRegister} />,
     },
 ]);
 

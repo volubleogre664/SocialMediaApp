@@ -5,11 +5,13 @@ namespace Webapi.Models.Inputs
 
     public class UserDataInput
     {
+        public string AuthUserId { get; set; }
+
         [Required]
         public string Username { get; set; }
 
         [Required]
-        public string FirsName { get; set; }
+        public string FirstName { get; set; }
 
         [Required]
         public string LastName { get; set; }
