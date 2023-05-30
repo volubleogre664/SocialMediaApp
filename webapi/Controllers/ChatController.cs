@@ -22,6 +22,7 @@
             var chatReceiverHistory = this.chatService.FindAllByField("RecievingAuthUserId", userId);
 
             chatHistory.AddRange(chatReceiverHistory);
+            chatHistory.Sort((x, y) => DateTime.Compare(x.Date, y.Date));
 
             return chatHistory;
         }
