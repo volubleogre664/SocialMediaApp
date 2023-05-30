@@ -12,7 +12,6 @@
     <BuildOutputFolder>$(MSBuildProjectDirectory)\build</BuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="src\components\" />
     <Folder Include="src\pages\" />
   </ItemGroup>
 </Project>

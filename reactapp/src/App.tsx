@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Chat from "./pages/Chat";
 
 import Header from "./components/Header";
+import Search from "components/Search";
 
 import "./styles/App.css";
 
@@ -31,8 +32,9 @@ const router = createBrowserRouter([
 function WrapperComponent({ Component }: { Component: Function }) {
     return (
         <>
-            <Header />
+            <Header />            
             <Component />
+            <Search />
         </>
     );
 }
