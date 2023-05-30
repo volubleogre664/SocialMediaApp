@@ -10,7 +10,7 @@ const SearchComponent = () => {
         setKeyword(newKeyword);
 
         try {
-            const response = await axios.get('/api/search', {
+            const response = await axios.get('https://localhost:7285/api/search', {
                 params: { keyword: newKeyword }
             });
 
@@ -24,8 +24,8 @@ const SearchComponent = () => {
         <div>
             <input type="text" value={keyword} onChange={handleSearch} placeholder="Search for a post..." />
             <ul>
-                {results.map((result, index) => (
-                    <li key={index}>{result}</li>
+                {results.map((result:{ text: string }, index) => (
+                    <li key={index}>{result.text}</li>
                 ))}
             </ul>
         </div>

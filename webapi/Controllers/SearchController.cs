@@ -21,7 +21,6 @@
         {
             var results = this.postService.GetAll()
             .Where(_ => _.Text.Contains(keyword))
-            .Select(_ => _.Text)
             .ToList();
             return this.Ok(results);
         }

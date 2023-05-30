@@ -8,7 +8,7 @@ import UserProfile from "./pages/UserProfile";
 import FinishRegister from "./pages/FinishRegister";
 
 import Header from "./components/Header";
-import Search from "components/Search";
+import Search from "./components/Search";
 
 import "./styles/App.css";
 
