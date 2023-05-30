@@ -20,8 +20,8 @@ type ChatResponse = {
 
 function Chat() {
     const { user } = useUser();
-   // const { newMessage, events } = Connector();
-    const { JoinGroup, events } = Connector();
+    const { newMessage, events } = Connector();
+    //const { JoinGroup, events } = Connector();
     const [message, setMessage] = useState("");
 
     const { loading, error, fetchData, response }: FetchResults =
@@ -65,7 +65,6 @@ function Chat() {
                     <header className="chat__header">
                         <h1>Contacts</h1>
                     </header>
-
                     <main className="chats__aside-contacts">
                         <Contact
                             lastMessage="Some message"
@@ -126,7 +125,7 @@ function Chat() {
                                     fontWeight: "bold",
                                 }}
                                 type="submit"
-                                onClick={() => JoinGroup(message,"group Name")}
+                                onClick={() => newMessage(message,"group Name")}
                             >
                                 Send
                             </Button>
