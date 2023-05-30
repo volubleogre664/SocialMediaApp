@@ -8,7 +8,7 @@ import Loader from "../components/Loader";
 
 import useForm from "../hooks/useForm";
 import useFetch from "../hooks/useFetch";
-import { useUser } from "hooks/stateHooks";
+import { useUser } from "../hooks/stateHooks";
 
 import { UserState } from "../utils/Types";
 
