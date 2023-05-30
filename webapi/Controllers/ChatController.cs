@@ -19,6 +19,9 @@
         public object GetChatHistory(string userId)
         {
             var chatHistory = this.chatService.FindAllByField("AuthUserId", userId);
+            var chatReceiverHistory = this.chatService.FindAllByField("RecievingAuthUserId", userId);
+
+            chatHistory.AddRange(chatReceiverHistory);
 
             return chatHistory;
         }

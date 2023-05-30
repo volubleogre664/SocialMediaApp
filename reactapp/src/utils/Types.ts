@@ -23,11 +23,11 @@ type UserState = {
 };
 
 type ChatState = {
-    ChatId?: number;
-    AuthUserId: string;
-    RecievingAuthUserId: string;
-    Text: string;
-    Date: Date;
+    chatId?: number;
+    authUserId: string;
+    recievingAuthUserId: string;
+    text: string;
+    date: Date;
 };
 
 export type { FetchData, FetchResults, UserState, ChatState };

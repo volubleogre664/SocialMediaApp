@@ -19,7 +19,8 @@ export const userSlice = createSlice({
             state.chats = action.payload || [];
         },
         addChat: (state, action: PayloadAction<ChatState>) => {
-            if (!state.chats.find(_ => _.ChatId === action.payload.ChatId)) {
+            //state.chats.push(action.payload);
+            if (!state.chats.find(_ => _.chatId === action.payload.chatId)) {
                 state.chats.push(action.payload);
             }
         },

@@ -32,7 +32,7 @@ function Chat() {
         useFetch<ChatState[]>({
             url: "CHAT",
             method: "GET",
-            query: "?userId=EX100",
+            query: "?userId="+user.authUserId,
         });
 
     const handleContactClick = (contact: UserState) => () => {
@@ -60,6 +60,7 @@ function Chat() {
     useEffect(() => {
         if (response) {
             console.log("Response", response);
+            console.log(response);
             setChats({ type: "setChats", payload: response });
         }
 
@@ -94,10 +95,10 @@ function Chat() {
         }
 
         var newChat: ChatState = {
-            Text: message,
-            Date: new Date(),
-            AuthUserId: user.authUserId,
-            RecievingAuthUserId: currentContact?.authUserId,
+            text: message,
+            date: new Date(),
+            authUserId: user.authUserId,
+            recievingAuthUserId: currentContact?.authUserId,
         };
 
         newMessage(JSON.stringify(newChat), generateGroupName(user.authUserId,currentContact.authUserId));
@@ -140,12 +141,12 @@ function Chat() {
                                         {chats.map((chat: ChatState) => (
                                             <Message
                                                 isMine={
-                                                    chat.AuthUserId ===
+                                                    chat.authUserId ===
                                                     user.authUserId
                                                 }
-                                                key={chat.ChatId}
-                                                timestamp={"12:01:01"}
-                                                message={chat.Text}
+                                                key={chat.chatId}
+                                                timestamp={"12-01-01"}
+                                                message={chat.text}
                                             />
                                         ))}
                                     </>
