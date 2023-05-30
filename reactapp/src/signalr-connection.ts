@@ -5,7 +5,7 @@ const URL = process.env.HUB_ADDRESS ?? "https://localhost:7285/chat";
 class Connector {
 
     private connection: signalR.HubConnection;
-    public events: (onMessageReceived: (username: string, message: string) => void) => void;
+    public events: (onMessageReceived: (message: string) => void) => void;
     static instance: Connector;
 
     constructor() {
@@ -21,16 +21,14 @@ class Connector {
             this.connection.send("MapConnectionID", "DummyUserId").then(x => console.log("ConnectionId Mapped"));
         }).catch(err => document.write(err)); // starts a connection with the chathub*/
 
-        this.connection.on("Send", function (message) {
+/*        this.connection.on("Send", function (message) {
             console.log(message);
         });
-
+*/
         this.events = (onMessageReceived) => {
-            this.connection.on("messageReceived", (username, message) => {
-                console.log("From onMessageReceived: ");
-                console.log(username)
-                console.log(message);
-                onMessageReceived(username, message);
+            this.connection.on("Send", (message) => {
+                console.log("From Send Message"+message);
+                onMessageReceived(message);
             });
         }; // Listens for a message from Chat Hub
     }
@@ -45,7 +43,6 @@ class Connector {
     public JoinGroup = (groupName: string) => {
         this.connection.send("JoinGroup",groupName).then(x => console.log("groupjoined"));
     }
-
     //Sends a message to the ChatHub
 
     public static getInstance(): Connector {

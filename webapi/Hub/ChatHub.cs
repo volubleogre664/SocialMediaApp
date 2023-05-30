@@ -4,6 +4,7 @@
 
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.CodeAnalysis.Differencing;
+    using Newtonsoft.Json;
     using Webapi.Data;
     using Webapi.Interfaces;
     using Webapi.Models;
@@ -26,81 +27,23 @@
             this.authContext = authContext;*/
         }
 
-        public async Task NewMessage(string user, string message)
-        {
-          // var client = Clients.User(user);
-
-           //Console.WriteLine(Clients.User(user));
-           await Clients.User(user).SendAsync("send",user ,"To an individual client");
-          // await Clients.All.SendAsync("send", "To all clients");
-
-            //  Console.WriteLine(Clients.Client(Context.ConnectionId));
-            /*
-                        Console.WriteLine(Clients.Client(Context.UserIdentifier));
-                        Clients.All.SendAsync("broadcastMessage", user, message);
-
-                        await Clients.All.SendAsync("messageReceived", user, message);
-            */
-
-            // await Clients.Client(Context.ConnectionId)
-
-            /*            var userEmail = this.httpContextAccessor.HttpContext!.User.Identity!.Name;
-                        var authUser = this.authContext.Users.FirstOrDefault(_ => _.Email == userEmail);*/
-
-            var chat = new Chat()
-            {
-                AuthUserId = "EX100",
-                RecievingAuthUserId = "EX200",
-                Text = message,
-                Date = DateTime.Now,
-            };
-
-            this.chatService.Add(chat);
-        }
-
-        public async Task BroadcastMessage(string name, string message)
-        {
-            Console.WriteLine(Clients.Client(Context.ConnectionId));
-            Console.WriteLine(Clients.Client(Context.UserIdentifier));
-            Clients.All.SendAsync("broadcastMessage", name, message);
-        }
-
-/*        public async Task Echo(string name, string message) =>
-            Clients.Client(Context.ConnectionId)
-                   .SendAsync("echo", name, $"{message} (echo from server)");*/
-
-        public Task SendPrivateMessage(string user, string message)
-        {
-            return Clients.User(user).SendAsync("ReceiveMessage", message);
-        }
-
         public async Task JoinGroup(string groupName)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
         }
 
-/*        public async Task<bool> IsGroupExists(string groupName)
-        { 
-            var connections = await Groups.
-            return connections.Any(); 
-        }*/
 
         public async Task SendToGroup(string groupName, string message)
         {
-            await Clients.Group(groupName).SendAsync("Send", message);
-           // await Clients.All.SendAsync("Send", "To all clients");
+            var chat = JsonConvert.DeserializeObject<Chat>(message);
+            var savedChat = await this.chatService.AddChat(chat);
+
+            Clients.Group(groupName).SendAsync("Send", savedChat);
         }
 
-/*        public override async Task OnConnectedAsync(string userName)
+/*        public override System.Threading.Tasks.Task OnConnectedAsync()
         {
-             
-
-        }*/
-
-/*        public async Task<string> MapConnectionID(string connectionId, string authID)
-        {
-            Console.WriteLine($"Connection ID: {connectionId}");
-            return $"Connection ID: {connectionId}";
+            return null;
         }*/
     }
 }

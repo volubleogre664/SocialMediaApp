@@ -16,18 +16,19 @@ function Chat() {
     const [currentContact, setCurrentContact] = useState<UserState | null>(
         null
     );
-    const { newMessage, events } = Connector();
+    const { newMessage, events, JoinGroup } = Connector();
     const [message, setMessage] = useState("");
 
     const {
         fetchData: fetchContacts,
         response: contactsResponse,
+        setResponse: setContactResponse
     }: FetchResults = useFetch<UserState[]>({
         url: "CONTACTS",
         method: "GET",
     });
 
-    const { loading, error, fetchData, response, setResponse }: FetchResults =
+    const { loading, error, fetchData, response, setResponse: setChatResponse }: FetchResults =
         useFetch<ChatState[]>({
             url: "CHAT",
             method: "GET",
@@ -36,15 +37,24 @@ function Chat() {
 
     const handleContactClick = (contact: UserState) => () => {
         setCurrentContact(contact);
+        JoinGroup(generateGroupName(user.authUserId, contact.authUserId));
+
+        //console.log(user.authUserId + "has joined Group: " + generateGroupName(user.authUserId, contact.authUserId));
     };
 
-    /*    useEffect(() => {
-        events((_, message) => console.log(message));
-    },[]);*/
+    useEffect(() => {
+        events((message) => {
+            let chat : ChatState = JSON.parse(message);
+            setChats({
+                type: "addChat", payload: chat
+            })
+        });
+    },[]);
 
     useEffect(() => {
         fetchData();
         fetchContacts();
+        //JoinGroup(user.authUserId);
     }, []);
 
     useEffect(() => {
@@ -54,15 +64,27 @@ function Chat() {
         }
 
         return () => {
-            setResponse(null);
+            setChatResponse(null);
         };
-    }, [response, setChats, setResponse]);
+    }, [response, setChats, setChatResponse]);
 
     useEffect(() => {
-        if (contactsResponse && !contacts.length) {
+        if (contactsResponse) {
             setContacts({ type: "setContacts", payload: contactsResponse });
         }
-    }, [contactsResponse, setContacts, contacts]);
+
+        return () => {
+            setContactResponse(null);
+        };
+
+    }, [contactsResponse, setContacts, setContactResponse]);
+
+    function generateGroupName(firstUser: string, secondUser:  string) {
+        let sortedStrings: string[] = [firstUser, secondUser].sort();
+        let newString: string = sortedStrings.join(" ");
+
+        return (newString);
+    }
 
     function formSubmit(e: any) {
         e.preventDefault();
@@ -72,13 +94,13 @@ function Chat() {
         }
 
         var newChat: ChatState = {
-            text: message,
-            date: new Date(),
-            authUserId: user.authUserId,
-            recievingAuthUserId: currentContact?.authUserId,
+            Text: message,
+            Date: new Date(),
+            AuthUserId: user.authUserId,
+            RecievingAuthUserId: currentContact?.authUserId,
         };
 
-        newMessage(JSON.stringify(newChat), "Some Group");
+        newMessage(JSON.stringify(newChat), generateGroupName(user.authUserId,currentContact.authUserId));
 
         console.log("Form submitted", message);
 
@@ -118,12 +140,12 @@ function Chat() {
                                         {chats.map((chat: ChatState) => (
                                             <Message
                                                 isMine={
-                                                    chat.authUserId ===
+                                                    chat.AuthUserId ===
                                                     user.authUserId
                                                 }
-                                                key={chat.chatId}
-                                                timestamp={chat.date.toString()}
-                                                message={chat.text}
+                                                key={chat.ChatId}
+                                                timestamp={"12:01:01"}
+                                                message={chat.Text}
                                             />
                                         ))}
                                     </>
