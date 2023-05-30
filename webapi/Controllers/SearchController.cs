@@ -1,9 +1,8 @@
 ﻿namespace Webapi.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
+
     using Webapi.Interfaces;
-    using Webapi.Services;
 
     [ApiController]
     [Route("/api/search")]
@@ -20,8 +19,8 @@
         public IActionResult SearchKeywords(string keyword)
         {
             var results = this.postService.GetAll()
-            .Where(_ => _.Text.Contains(keyword))
-            .ToList();
+                .Where(_ => _.Text.ToLower().Contains(keyword.ToLower()))
+                .ToList();
             return this.Ok(results);
         }
     }
