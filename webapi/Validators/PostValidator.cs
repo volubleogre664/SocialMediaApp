@@ -8,33 +8,19 @@
     {
         public PostValidator()
         {
-            this.RuleFor(_ => _.UserID)
-                .NotNull();
-
             this.RuleFor(_ => _.Text)
                 .NotEmpty();
+
+            this.RuleFor(_ => _.UserID)
+                .GreaterThan(0);
 
             this.RuleFor(_ => _.DateTimePosted)
                 .NotNull()
                 .LessThan(DateTime.Now.AddDays(1).Date)
-                .WithMessage($"Date Cannot be After {DateTime.Now.AddDays(1).ToShortDateString()}");
+                .WithMessage($"Date Cannot be On or After {DateTime.Now.AddDays(1).ToShortDateString()}");
 
-            this.RuleFor( _ => _.MediaUrl)
-                .Custom((url, context) =>
-                {
-                    if (url != null && url.Trim() != string.Empty && !ValidateUrl(url))
-                    {
-                        context.AddFailure("Invalid URL");
-                    }
-                });
-        }
-
-        private static bool ValidateUrl(string url)
-        {
-            bool isValidUrl = Uri.TryCreate(url, UriKind.Absolute, out Uri? uriResult)
-                && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
-
-            return isValidUrl;
+            this.RuleFor(_ => _.MediaUrl)
+                .NotEmpty();
         }
     }
 }
