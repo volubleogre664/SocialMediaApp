@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Axios from "axios";
 import useFetch from "../hooks/useFetch";
+import { useUser } from "../hooks/stateHooks";
 import { FetchResults } from "../utils/Types";
 import Connector from "../signalr-connection";
 import { Button } from "@mui/material";
@@ -18,7 +19,9 @@ type ChatResponse = {
 };
 
 function Chat() {
-    const { newMessage, events } = Connector();
+    const { user } = useUser();
+    const { newMessage, events } = Connector(user.authUserId);
+    //const { JoinGroup, events } = Connector();
     const [message, setMessage] = useState("");
 
     const { loading, error, fetchData, response }: FetchResults =
@@ -27,6 +30,10 @@ function Chat() {
             method: "GET",
             query: "?userId=EX100"
         });
+
+    useEffect(() => {
+        events((_, message) => console.log(message));
+    },[]);
 
     useEffect(() => {
 
@@ -119,7 +126,7 @@ function Chat() {
                                     fontWeight: "bold",
                                 }}
                                 type="submit"
-                                onClick={() => newMessage(message)}
+                                onClick={() => newMessage(message,user.authUserId)}
                             >
                                 Send
                             </Button>

@@ -28,10 +28,14 @@
 
         public async Task NewMessage(string user, string message)
         {
+          // var client = Clients.User(user);
 
-            Clients.User(user).SendAsync("ReceiveMessage", message);
+           //Console.WriteLine(Clients.User(user));
+           await Clients.User(user).SendAsync("send",user ,"To an individual client");
+          // await Clients.All.SendAsync("send", "To all clients");
+
+            //  Console.WriteLine(Clients.Client(Context.ConnectionId));
             /*
-                        Console.WriteLine(Clients.Client(Context.ConnectionId));
                         Console.WriteLine(Clients.Client(Context.UserIdentifier));
                         Clients.All.SendAsync("broadcastMessage", user, message);
 
@@ -68,6 +72,23 @@
         public Task SendPrivateMessage(string user, string message)
         {
             return Clients.User(user).SendAsync("ReceiveMessage", message);
+        }
+
+        public async Task JoinGroup(string groupName)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+            await this.SendToGroup(groupName, "testing 1 2 3");
+        }
+
+        public async Task SendToGroup(string groupName, string message)
+        {
+            await Clients.Group(groupName).SendAsync("Send", message);
+        }
+
+        public async Task<string> MapConnectionID(string connectionId, string authID)
+        {
+            Console.WriteLine($"Connection ID: {connectionId}");
+            return $"Connection ID: {connectionId}";
         }
     }
 }
