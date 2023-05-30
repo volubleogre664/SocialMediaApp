@@ -8,18 +8,20 @@ class Connector {
     public events: (onMessageReceived: (username: string, message: string) => void) => void;
     static instance: Connector;
 
-    constructor(user_id: string) {
+    constructor() {
 
         this.connection = new signalR.HubConnectionBuilder()
-            .withUrl(URL, {accessTokenFactory : () => user_id})
+            .withUrl(URL)
             .withAutomaticReconnect()
             .build(); //initializes instance of Connection to Chat Hub
 
+        this.connection.start().catch(err => document.write(err));
+/*
         this.connection.start().then(() => {
             this.connection.send("MapConnectionID", "DummyUserId").then(x => console.log("ConnectionId Mapped"));
-        }).catch(err => document.write(err)); // starts a connection with the chathub
+        }).catch(err => document.write(err)); // starts a connection with the chathub*/
 
-        this.connection.on("send", function (username,message) {
+        this.connection.on("Send", function (message) {
             console.log(message);
         });
 
@@ -32,22 +34,22 @@ class Connector {
             });
         }; // Listens for a message from Chat Hub
     }
-    public MapConnectionId = () => {
+/*    public MapConnectionId = () => {
         this.connection.send("MapConnectionID", "DummyUserId");
-    }
+    }*/
 
     public newMessage = (messages: string, user_id: string) => {
         this.connection.send("NewMessage", "414fed45-e2a5-4643-a0ad-367aa0ced2a7", messages).then(x => console.log("sent"))
     }
 
     public JoinGroup = (messages: string, groupName: string) => {
-        this.connection.send("JoinGroup", "This Is Your GroupName").then(x => console.log("Group Created"));
+        this.connection.send("JoinGroup", "This Is Your GroupName").then(x => console.log("groupjoined"));
     }
     //Sends a message to the ChatHub
 
-    public static getInstance(user_id: string): Connector {
+    public static getInstance(): Connector {
         if (!Connector.instance)
-            Connector.instance = new Connector(user_id);
+            Connector.instance = new Connector();
         return Connector.instance;
     } //Returns a static instance of the Connector class to ensure only one instance
 }

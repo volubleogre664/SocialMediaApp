@@ -20,8 +20,8 @@ type ChatResponse = {
 
 function Chat() {
     const { user } = useUser();
-    const { newMessage, events } = Connector(user.authUserId);
-    //const { JoinGroup, events } = Connector();
+   // const { newMessage, events } = Connector();
+    const { JoinGroup, events } = Connector();
     const [message, setMessage] = useState("");
 
     const { loading, error, fetchData, response }: FetchResults =
@@ -31,9 +31,9 @@ function Chat() {
             query: "?userId=EX100"
         });
 
-    useEffect(() => {
+/*    useEffect(() => {
         events((_, message) => console.log(message));
-    },[]);
+    },[]);*/
 
     useEffect(() => {
 
@@ -126,7 +126,7 @@ function Chat() {
                                     fontWeight: "bold",
                                 }}
                                 type="submit"
-                                onClick={() => newMessage(message,user.authUserId)}
+                                onClick={() => JoinGroup(message,"group Name")}
                             >
                                 Send
                             </Button>

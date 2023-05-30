@@ -65,9 +65,9 @@
             Clients.All.SendAsync("broadcastMessage", name, message);
         }
 
-        public async Task Echo(string name, string message) =>
+/*        public async Task Echo(string name, string message) =>
             Clients.Client(Context.ConnectionId)
-                   .SendAsync("echo", name, $"{message} (echo from server)");
+                   .SendAsync("echo", name, $"{message} (echo from server)");*/
 
         public Task SendPrivateMessage(string user, string message)
         {
@@ -83,12 +83,13 @@
         public async Task SendToGroup(string groupName, string message)
         {
             await Clients.Group(groupName).SendAsync("Send", message);
+           // await Clients.All.SendAsync("Send", "To all clients");
         }
 
-        public async Task<string> MapConnectionID(string connectionId, string authID)
+/*        public async Task<string> MapConnectionID(string connectionId, string authID)
         {
             Console.WriteLine($"Connection ID: {connectionId}");
             return $"Connection ID: {connectionId}";
-        }
+        }*/
     }
 }
