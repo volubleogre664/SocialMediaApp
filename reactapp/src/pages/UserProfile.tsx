@@ -1,6 +1,6 @@
 import { Person } from "@mui/icons-material";
 import { Avatar } from "@mui/material";
-import { useUser } from "hooks/stateHooks";
+import { useUser } from "../hooks/stateHooks";
 import { useNavigate } from "react-router-dom";
 
 function UserProfile() {

@@ -34,6 +34,7 @@ function PostForm() {
     const { loading, error, fetchData, response }: FetchResults =
         useFetch<RegisterResponse>({
             url: "POSTS",
+            query: "",
             method: "POST",
             body: values,
         });
