@@ -17,6 +17,11 @@
         [HttpPost]
         public async Task<IActionResult> UploadMedia(IFormFile file)
         {
+            if (file == null || file.Length == 0)
+            {
+                return this.BadRequest("No file uploaded");
+            }
+
             using (var fileStream = file.OpenReadStream())
             {
                 await this.blobStorageService.UploadMediaFileAsync(fileStream, "media-container", file.FileName);
