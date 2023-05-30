@@ -3,6 +3,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.SignalR;
+    using Microsoft.CodeAnalysis.Differencing;
     using Webapi.Data;
     using Webapi.Interfaces;
     using Webapi.Models;
@@ -12,17 +13,24 @@
     public class ChatHub : Hub
     {
         private readonly IChatService chatService;
-        private readonly ApplicationDbContext context;
+/*        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly AuthDbContext authContext;*/
 
-        public ChatHub(IChatService chatService, ApplicationDbContext context)
+        public ChatHub(
+            IChatService chatService
+   /*         IHttpContextAccessor httpContextAccessor,
+            AuthDbContext authContext*/)
         {
             this.chatService = chatService;
-            this.context = context;
+            /*this.httpContextAccessor = httpContextAccessor;
+            this.authContext = authContext;*/
         }
 
         public async Task NewMessage(string user, string message)
         {
             await Clients.All.SendAsync("messageReceived", user, message);
+/*            var userEmail = this.httpContextAccessor.HttpContext!.User.Identity!.Name;
+            var authUser = this.authContext.Users.FirstOrDefault(_ => _.Email == userEmail);*/
 
             var chat = new Chat()
             {

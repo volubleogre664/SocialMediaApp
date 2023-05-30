@@ -1,27 +1,55 @@
 import { useEffect, useState } from "react";
-// import Connector from "../signalr-connection";
+import Axios from "axios";
+import useFetch from "../hooks/useFetch";
+import { FetchResults } from "../utils/Types";
+import Connector from "../signalr-connection";
 import { Button } from "@mui/material";
 import Contact from "../components/Contact";
 import Message from "../components/Message";
 
 import "../styles/pages/Chat.css";
 
+type ChatResponse = {
+    chatId?: number,
+    authUserId?: string,
+    recievingAuthUserId?: string,
+    text: string,
+    date: Date
+};
+
 function Chat() {
-    // const { newMessage, events } = Connector();
+    const { newMessage, events } = Connector();
     const [message, setMessage] = useState("");
-    // const [name, setName] = useState("");
+
+    const { loading, error, fetchData, response }: FetchResults =
+        useFetch<ChatResponse[]>({
+            url: "CHAT",
+            method: "GET",
+            query: "?userId=EX100"
+        });
+
+    useEffect(() => {
+
+        fetchData()
+
+    },[]);
+
+    useEffect(() => {
+
+        if (response) {
+            console.log("Response", response);
+        }
+
+    }, [response]);
 
     function formSubmit(e: any) {
         e.preventDefault();
-
+        var newChat = { text: message, date: new Date().toLocaleTimeString() };
         console.log("Form submitted", message);
+        response.push(newChat);
 
         setMessage("");
     }
-
-    // useEffect(() => {
-    //     events((_, message) => setMessage(message));
-    // });
 
     return (
         <div className="chat">
@@ -47,42 +75,6 @@ function Chat() {
                             picture=""
                             name="Leon Doe"
                         />
-                        <Contact
-                            lastMessage="Some message"
-                            picture=""
-                            name="Sam Doe"
-                        />
-                        <Contact
-                            lastMessage="Some message"
-                            picture=""
-                            name="Ndu Doe"
-                        />
-
-                        <Contact
-                            lastMessage="Some message"
-                            picture=""
-                            name="John Doe"
-                        />
-                        <Contact
-                            lastMessage="Some message"
-                            picture=""
-                            name="Mpho Doe"
-                        />
-                        <Contact
-                            lastMessage="Some message"
-                            picture=""
-                            name="Leon Doe"
-                        />
-                        <Contact
-                            lastMessage="Some message"
-                            picture=""
-                            name="Sam Doe"
-                        />
-                        <Contact
-                            lastMessage="Some message"
-                            picture=""
-                            name="Ndu Doe"
-                        />
                     </main>
                 </aside>
 
@@ -91,33 +83,25 @@ function Chat() {
                         <h1>Chat</h1>
                     </header>
 
-                    <main className="chat__messages">
-                        <Message
-                            isMine={false}
-                            timestamp={new Date().toLocaleTimeString()}
-                            message="Hy"
-                        />
-                        <Message
-                            isMine={true}
-                            timestamp={new Date().toLocaleTimeString()}
-                            message="How are you"
-                        />
-                        <Message
-                            isMine={false}
-                            timestamp={new Date().toLocaleTimeString()}
-                            message="I'm good how are you?"
-                        />
-                        <Message
-                            isMine={true}
-                            timestamp={new Date().toLocaleTimeString()}
-                            message="I'm alright"
-                        />
-                        <Message
-                            isMine={true}
-                            timestamp={new Date().toLocaleTimeString()}
-                            message="So what do you want"
-                        />
-                    </main>
+                    {(() => {
+                        if (response) {
+                            return (
+                                <main className="chat__messages">
+                                    {response.map((chat: ChatResponse) => (
+                                        <Message
+                                            isMine={false}
+                                            timestamp={(chat.date).toString()}
+                                            message={chat.text}
+                                        />
+                                    ))}
+                                </main>
+                            )
+                        } else {
+                            return (
+                                <h4> Messages Loading... </h4>
+                            )
+                        }
+                    })()}
 
                     <footer className="chat__footer">
                         <form onSubmit={formSubmit}>
@@ -135,6 +119,7 @@ function Chat() {
                                     fontWeight: "bold",
                                 }}
                                 type="submit"
+                                onClick={() => newMessage(message)}
                             >
                                 Send
                             </Button>

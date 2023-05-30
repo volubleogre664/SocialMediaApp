@@ -3,9 +3,9 @@ import { FetchData } from "../utils/Types";
 import API_ENDPOINTS from "../utils/ApiRoutes";
 
 function useFetch<T>(data: FetchData) {
-    const { method, body } = data;
+    const { method, body, query } = data;
 
-    const url = API_ENDPOINTS[data.url];
+    const url = API_ENDPOINTS[data.url] + query;
 
     const [response, setResponse] = useState<T | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -13,7 +13,6 @@ function useFetch<T>(data: FetchData) {
 
     const fetchData = async () => {
         setLoading(true);
-
         try {
             const res = await fetch(url, {
                 method,
