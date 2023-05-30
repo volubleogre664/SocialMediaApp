@@ -9,7 +9,7 @@ import Loader from "components/Loader";
 import useForm from "../hooks/useForm";
 import useFetch from "../hooks/useFetch";
 
-import { FetchResults } from "utils/Types";
+import { FetchResults } from "../utils/Types";
 
 import "../styles/pages/Register.css";
 

@@ -6,10 +6,11 @@
     public class Post
     {
         [Key]
-        public int PostId { get; set; }
+        [Column("pkPostID")]
+        public int PostID { get; set; }
 
         [Column("fkUserId")]
-        public string UserId { get; set; }
+        public int UserID { get; set; }
 
         public string Text { get; set; }
 

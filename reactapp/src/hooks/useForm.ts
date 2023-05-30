@@ -16,9 +16,9 @@ function useForm<T>(callback: Function, initialState: T = {} as T) {
                     setValues({
                         ...values,
                         [onChangeEvent.target.name]: readerEvent.target.result,
+                        [onChangeEvent.target.name + "File"]: file,
                     });
                 };
-
                 fileReader.readAsDataURL(file);
                 break;
             }
@@ -45,7 +45,11 @@ function useForm<T>(callback: Function, initialState: T = {} as T) {
         callback();
     };
 
-    const updateValues = (_values: any) => setValues(_values);
+    const updateValues = (valueName: string, value: any) =>
+        setValues({
+            ...values,
+            [valueName]: value,
+        });
 
     return {
         onChange,
