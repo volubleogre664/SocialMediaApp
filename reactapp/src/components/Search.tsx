@@ -22,7 +22,7 @@ const SearchComponent = () => {
 
     return (
         <div>
-            <input type="text" value={keyword} onChange={handleSearch} />
+            <input type="text" value={keyword} onChange={handleSearch} placeholder="Search for a post..." />
             <ul>
                 {results.map((result, index) => (
                     <li key={index}>{result}</li>
