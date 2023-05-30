@@ -12,4 +12,13 @@ type FetchResults = {
     fetchData: () => void;
 };
 
-export type { FetchData, FetchResults };
+type UserState = {
+    authUserId: string;
+    userId: number;
+    username: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl: string;
+};
+
+export type { FetchData, FetchResults, UserState };

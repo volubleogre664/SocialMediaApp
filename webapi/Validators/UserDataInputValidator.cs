@@ -13,7 +13,7 @@
                 .MinimumLength(3)
                 .MaximumLength(50);
 
-            this.RuleFor(_ => _.FirsName)
+            this.RuleFor(_ => _.FirstName)
                 .NotEmpty()
                 .MaximumLength(50);
 
@@ -29,6 +29,9 @@
                         context.AddFailure("Invalid URL");
                     }
                 });
+
+            this.RuleFor(_ => _.AuthUserId)
+                .NotEmpty();
         }
 
         private static bool ValidateUrl(string url)

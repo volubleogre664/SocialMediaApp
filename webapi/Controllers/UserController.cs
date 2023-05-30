@@ -39,25 +39,19 @@
                 return this.BadRequest(this.ModelState);
             }
 
-            var authUserId = this.signInManager.UserManager.GetUserId(this.User);
-
-            if (authUserId == null)
-            {
-                return this.BadRequest(new { message = "Please sign again" });
-            }
-
             var user = new User()
             {
-                AuthUserId = authUserId,
-                FirstName = model.FirsName,
-                LastName = model.FirsName,
+                AuthUserId = model.AuthUserId,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
                 Username = model.Username,
                 AvatarUrl = model.AvatarUrl,
             };
 
             this.userService.Add(user);
+            var newUser = this.userService.FindByField("AuthUserId", model.AuthUserId);
 
-            return this.Ok(model);
+            return this.Ok(newUser);
         }
     }
 }

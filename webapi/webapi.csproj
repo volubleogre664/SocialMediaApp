@@ -5,7 +5,6 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>fa384497-3bbf-4d5f-93e1-7deff66f42a7</UserSecretsId>
-		<UserSecretsId>SignalRChatRoomEx</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>
