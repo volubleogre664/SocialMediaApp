@@ -16,8 +16,7 @@ function Chat() {
     const [currentContact, setCurrentContact] = useState<UserState | null>(
         null
     );
-    // const { newMessage, events } = Connector();
-    const { JoinGroup, events } = Connector();
+    const { newMessage, events } = Connector();
     const [message, setMessage] = useState("");
 
     const {
@@ -79,7 +78,7 @@ function Chat() {
             recievingAuthUserId: currentContact?.authUserId,
         };
 
-        JoinGroup(JSON.stringify(newChat), currentContact?.authUserId);
+        newMessage(JSON.stringify(newChat), "Some Group");
 
         console.log("Form submitted", message);
 
@@ -93,7 +92,6 @@ function Chat() {
                     <header className="chat__header">
                         <h1>Contacts</h1>
                     </header>
-
                     <main className="chats__aside-contacts">
                         {contacts.length &&
                             contacts.map((contact: UserState) => (
@@ -152,6 +150,9 @@ function Chat() {
                                     fontWeight: "bold",
                                 }}
                                 type="submit"
+                                onClick={() =>
+                                    newMessage(message, "group Name")
+                                }
                             >
                                 Send
                             </Button>
@@ -159,27 +160,6 @@ function Chat() {
                     </footer>
                 </main>
             </section>
-
-            {/* <span>
-                message from signalR:{" "}
-                <span style={{ color: "green" }}>{message}</span>{" "}
-            </span>
-
-            <form>
-                <label>
-                    Enter your name:
-                    <input
-                        type="text"
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                    />
-                </label>
-            </form>
-
-            <br />
-            <button type="submit">
-                send date{" "}
-            </button> */}
         </div>
     );
 }

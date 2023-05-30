@@ -77,14 +77,25 @@
         public async Task JoinGroup(string groupName)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
-            await this.SendToGroup(groupName, "testing 1 2 3");
         }
+
+/*        public async Task<bool> IsGroupExists(string groupName)
+        { 
+            var connections = await Groups.
+            return connections.Any(); 
+        }*/
 
         public async Task SendToGroup(string groupName, string message)
         {
             await Clients.Group(groupName).SendAsync("Send", message);
            // await Clients.All.SendAsync("Send", "To all clients");
         }
+
+/*        public override async Task OnConnectedAsync(string userName)
+        {
+             
+
+        }*/
 
 /*        public async Task<string> MapConnectionID(string connectionId, string authID)
         {

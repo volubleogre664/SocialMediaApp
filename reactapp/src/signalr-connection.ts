@@ -38,13 +38,14 @@ class Connector {
         this.connection.send("MapConnectionID", "DummyUserId");
     }*/
 
-    public newMessage = (messages: string, user_id: string) => {
-        this.connection.send("NewMessage", "414fed45-e2a5-4643-a0ad-367aa0ced2a7", messages).then(x => console.log("sent"))
+    public newMessage = (messages: string, groupName: string) => {
+        this.connection.send("SendToGroup", groupName, messages);
     }
 
-    public JoinGroup = (messages: string, groupName: string) => {
-        this.connection.send("JoinGroup", "This Is Your GroupName").then(x => console.log("groupjoined"));
+    public JoinGroup = (groupName: string) => {
+        this.connection.send("JoinGroup",groupName).then(x => console.log("groupjoined"));
     }
+
     //Sends a message to the ChatHub
 
     public static getInstance(): Connector {
