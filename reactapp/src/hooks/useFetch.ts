@@ -3,7 +3,7 @@ import { FetchData } from "../utils/Types";
 import API_ENDPOINTS from "../utils/ApiRoutes";
 
 function useFetch<T>(data: FetchData) {
-    const { method, body, query="" } = data;
+    const { method, body, query = "" } = data;
 
     const url = API_ENDPOINTS[data.url] + query;
 
@@ -34,7 +34,7 @@ function useFetch<T>(data: FetchData) {
         }
     };
 
-    return { response, error, loading, fetchData };
+    return { response, error, loading, fetchData, setResponse };
 }
 
 export default useFetch;

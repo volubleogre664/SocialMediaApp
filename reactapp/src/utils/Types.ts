@@ -10,6 +10,7 @@ type FetchResults = {
     error: string | null;
     loading: boolean;
     fetchData: () => void;
+    setResponse?: any;
 };
 
 type UserState = {
@@ -21,4 +22,12 @@ type UserState = {
     avatarUrl: string;
 };
 
-export type { FetchData, FetchResults, UserState };
+type ChatState = {
+    chatId?: number;
+    authUserId: string;
+    recievingAuthUserId: string;
+    text: string;
+    date: Date;
+};
+
+export type { FetchData, FetchResults, UserState, ChatState };

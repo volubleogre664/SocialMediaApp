@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import Axios from "axios";
 import useFetch from "../hooks/useFetch";
-import { useUser } from "../hooks/stateHooks";
-import { FetchResults } from "../utils/Types";
+import { useUser, useContacts, useChats } from "../hooks/stateHooks";
+import { FetchResults, UserState, ChatState } from "../utils/Types";
 import Connector from "../signalr-connection";
 import { Button } from "@mui/material";
 import Contact from "../components/Contact";
@@ -10,50 +9,79 @@ import Message from "../components/Message";
 
 import "../styles/pages/Chat.css";
 
-type ChatResponse = {
-    chatId?: number,
-    authUserId?: string,
-    recievingAuthUserId?: string,
-    text: string,
-    date: Date
-};
-
 function Chat() {
     const { user } = useUser();
-   // const { newMessage, events } = Connector();
+    const { contacts, dispatch: setContacts } = useContacts();
+    const { chats, dispatch: setChats } = useChats();
+    const [currentContact, setCurrentContact] = useState<UserState | null>(
+        null
+    );
+    // const { newMessage, events } = Connector();
     const { JoinGroup, events } = Connector();
     const [message, setMessage] = useState("");
 
-    const { loading, error, fetchData, response }: FetchResults =
-        useFetch<ChatResponse[]>({
+    const {
+        fetchData: fetchContacts,
+        response: contactsResponse,
+    }: FetchResults = useFetch<UserState[]>({
+        url: "CONTACTS",
+        method: "GET",
+    });
+
+    const { loading, error, fetchData, response, setResponse }: FetchResults =
+        useFetch<ChatState[]>({
             url: "CHAT",
             method: "GET",
-            query: "?userId=EX100"
+            query: "?userId=EX100",
         });
 
-/*    useEffect(() => {
+    const handleContactClick = (contact: UserState) => () => {
+        setCurrentContact(contact);
+    };
+
+    /*    useEffect(() => {
         events((_, message) => console.log(message));
     },[]);*/
 
     useEffect(() => {
-
-        fetchData()
-
-    },[]);
+        fetchData();
+        fetchContacts();
+    }, []);
 
     useEffect(() => {
-
         if (response) {
             console.log("Response", response);
+            setChats({ type: "setChats", payload: response });
         }
 
-    }, [response]);
+        return () => {
+            setResponse(null);
+        };
+    }, [response, setChats, setResponse]);
+
+    useEffect(() => {
+        if (contactsResponse && !contacts.length) {
+            setContacts({ type: "setContacts", payload: contactsResponse });
+        }
+    }, [contactsResponse, setContacts, contacts]);
 
     function formSubmit(e: any) {
         e.preventDefault();
-        var newChat = { text: message, date: new Date().toLocaleTimeString() };
+
+        if (!currentContact) {
+            return;
+        }
+
+        var newChat: ChatState = {
+            text: message,
+            date: new Date(),
+            authUserId: user.authUserId,
+            recievingAuthUserId: currentContact?.authUserId,
+        };
+
+        JoinGroup(JSON.stringify(newChat), currentContact?.authUserId);
+
         console.log("Form submitted", message);
-        response.push(newChat);
 
         setMessage("");
     }
@@ -67,21 +95,15 @@ function Chat() {
                     </header>
 
                     <main className="chats__aside-contacts">
-                        <Contact
-                            lastMessage="Some message"
-                            picture=""
-                            name="John Doe"
-                        />
-                        <Contact
-                            lastMessage="Some message"
-                            picture=""
-                            name="Mpho Doe"
-                        />
-                        <Contact
-                            lastMessage="Some message"
-                            picture=""
-                            name="Leon Doe"
-                        />
+                        {contacts.length &&
+                            contacts.map((contact: UserState) => (
+                                <Contact
+                                    key={contact.userId}
+                                    picture={contact.avatarUrl}
+                                    name={`${contact.firstName} ${contact.lastName}`}
+                                    onClick={handleContactClick(contact)}
+                                />
+                            ))}
                     </main>
                 </aside>
 
@@ -90,25 +112,29 @@ function Chat() {
                         <h1>Chat</h1>
                     </header>
 
-                    {(() => {
-                        if (response) {
-                            return (
-                                <main className="chat__messages">
-                                    {response.map((chat: ChatResponse) => (
-                                        <Message
-                                            isMine={false}
-                                            timestamp={(chat.date).toString()}
-                                            message={chat.text}
-                                        />
-                                    ))}
-                                </main>
-                            )
-                        } else {
-                            return (
-                                <h4> Messages Loading... </h4>
-                            )
-                        }
-                    })()}
+                    <main className="chat__messages">
+                        {(() => {
+                            if (chats.length) {
+                                return (
+                                    <>
+                                        {chats.map((chat: ChatState) => (
+                                            <Message
+                                                isMine={
+                                                    chat.authUserId ===
+                                                    user.authUserId
+                                                }
+                                                key={chat.chatId}
+                                                timestamp={chat.date.toString()}
+                                                message={chat.text}
+                                            />
+                                        ))}
+                                    </>
+                                );
+                            } else {
+                                return <h4> Messages Loading... </h4>;
+                            }
+                        })()}
+                    </main>
 
                     <footer className="chat__footer">
                         <form onSubmit={formSubmit}>
@@ -126,7 +152,6 @@ function Chat() {
                                     fontWeight: "bold",
                                 }}
                                 type="submit"
-                                onClick={() => JoinGroup(message,"group Name")}
                             >
                                 Send
                             </Button>
@@ -152,7 +177,7 @@ function Chat() {
             </form>
 
             <br />
-            <button onClick={() => newMessage("From SingalR: " + message)}>
+            <button type="submit">
                 send date{" "}
             </button> */}
         </div>

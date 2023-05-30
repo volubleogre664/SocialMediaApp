@@ -9,7 +9,8 @@ const URLS: ApiRoutes = {
     LOGIN: "/api/auth/login",
     REGISTER: "/api/auth/register",
     FINALIZE_REGISTER: "/api/user/post",
-    CHAT: "/api/Chat"
+    CONTACTS: "/api/user/get",
+    CHAT: "/api/Chat",
 };
 
 // Apply proxy to add baseUrl to all endpoints

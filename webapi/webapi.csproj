@@ -4,7 +4,7 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<UserSecretsId>SignalRChatRoomEx</UserSecretsId>
+		<UserSecretsId>fa384497-3bbf-4d5f-93e1-7deff66f42a7</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>
