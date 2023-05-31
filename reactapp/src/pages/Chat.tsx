@@ -101,7 +101,9 @@ function Chat() {
             recievingAuthUserId: currentContact?.authUserId,
         };
 
-        newMessage(JSON.stringify(newChat), generateGroupName(user.authUserId,currentContact.authUserId));
+        newMessage(JSON.stringify(newChat), generateGroupName(user.authUserId, currentContact.authUserId));
+        newChat.text = "You got a new message bestie";
+        newMessage(JSON.stringify(newChat), "414fed45-e2a5-4643-a0ad-367aa0ced2a7");
 
         console.log("Form submitted", message);
 

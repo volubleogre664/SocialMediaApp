@@ -14,17 +14,10 @@
     public class ChatHub : Hub
     {
         private readonly IChatService chatService;
-/*        private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly AuthDbContext authContext;*/
 
-        public ChatHub(
-            IChatService chatService
-   /*         IHttpContextAccessor httpContextAccessor,
-            AuthDbContext authContext*/)
+        public ChatHub(IChatService chatService)
         {
             this.chatService = chatService;
-            /*this.httpContextAccessor = httpContextAccessor;
-            this.authContext = authContext;*/
         }
 
         public async Task JoinGroup(string groupName)
@@ -51,9 +44,10 @@
             await Clients.Group(groupName).SendAsync("Send", chatResponseJson);
         }
 
-/*        public override System.Threading.Tasks.Task OnConnectedAsync()
+        public async override System.Threading.Tasks.Task OnConnectedAsync()
         {
-            return null;
-        }*/
+            await Groups.AddToGroupAsync(Context.ConnectionId, "414fed45-e2a5-4643-a0ad-367aa0ced2a7");
+            await base.OnConnectedAsync();
+        }
     }
 }

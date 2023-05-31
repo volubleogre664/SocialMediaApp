@@ -6,6 +6,8 @@ import Login from "./pages/Login";
 import Chat from "./pages/Chat";
 import UserProfile from "./pages/UserProfile";
 import FinishRegister from "pages/FinishRegister";
+import Connector from "./signalr-connection";
+
 
 import Header from "./components/Header";
 
@@ -48,6 +50,9 @@ function WrapperComponent({ Component }: { Component: Function }) {
 }
 
 function App() {
+
+    const { newMessage, events, JoinGroup } = Connector();
+
     return (
         <div className="app">
             <RouterProvider router={router} />
