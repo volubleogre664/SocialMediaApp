@@ -32,7 +32,7 @@ function Chat() {
         useFetch<ChatState[]>({
             url: "CHAT",
             method: "GET",
-            query: "?userId="+user.authUserId,
+            query: "?receiverId=" + user.authUserId +"&senderId=e22635c7-582c-4584-943c-d5f396f7f4fb",
         });
 
     const handleContactClick = (contact: UserState) => () => {
@@ -127,7 +127,6 @@ function Chat() {
                             ))}
                     </main>
                 </aside>
-
                 <main className="chat__main">
                     <header className="chat__header">
                         <h1>Chat</h1>
