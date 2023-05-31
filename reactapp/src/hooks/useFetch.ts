@@ -24,9 +24,15 @@ function useFetch<T>(data: FetchData) {
                 },
             });
 
-            const json = await res.json();
+            const contentType = res.headers.get("Content-Type");
+            let content = null;
+            if (contentType && !contentType.startsWith("application/json")) {
+                content = await res.blob();
+            } else {
+                content = await res.json();
+            }
 
-            setResponse(json);
+            setResponse(content);
         } catch (error: any) {
             setError(error);
         } finally {

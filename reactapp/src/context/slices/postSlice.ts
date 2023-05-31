@@ -19,7 +19,7 @@ export const postSlice = createSlice({
             state.posts = action.payload || [];
         },
         addPost: (state, action: PayloadAction<PostState | null>) => {
-            if (action.payload) state.posts.push(action.payload);
+            if (action.payload) state.posts = [action.payload, ...state.posts];
         },
         addComment: (state, action: PayloadAction<Comment | null>) => {
             if (action.payload) {

@@ -36,6 +36,7 @@ function Post({ post, postOwner, comments, likes }: PostProps) {
     const [comment, setComment] = useState("");
     const { user } = useUser();
     const { dispatch: setPosts } = usePosts();
+    const [mediaFile, setMediaFile] = useState<File | null>(null);
 
     const {
         fetchData: sendLike,
@@ -65,6 +66,16 @@ function Post({ post, postOwner, comments, likes }: PostProps) {
             text: comment,
             dateTimePosted: new Date(),
         },
+    });
+
+    const {
+        response: mediaResponse,
+        fetchData: getMedia,
+
+    } = useFetch<File>({
+        url: "MEDIA",
+        method: "GET",
+        query: "/" + post.mediaUrl
     });
 
     const openComments = () => {
@@ -112,9 +123,22 @@ function Post({ post, postOwner, comments, likes }: PostProps) {
         };
     }, [setCommentRes, commentResponse]);
 
+    useEffect(() => {
+        if (post.mediaUrl) {
+            getMedia();
+        }
+    }, [post.mediaUrl])
+
+    useEffect(() => {
+        if (mediaResponse) {
+            console.log(mediaResponse);
+            setMediaFile(mediaResponse);
+        }
+    }, [mediaResponse])
+
     return (
         <div className="post">
-            <Card sx={{ maxWidth: 450 }}>
+            <Card sx={{ maxWidth: 600, minWidth: 350 }}>
                 <CardHeader
                     avatar={
                         <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -127,14 +151,23 @@ function Post({ post, postOwner, comments, likes }: PostProps) {
                         "MMMM DD, YYYY"
                     )}
                 />
-                {(post.mediaUrl === '""' && (
-                    <CardMedia
-                        component="img"
-                        height="194"
-                        src="https://mui.com/static/images/cards/paella.jpg"
-                        alt="Paella dish"
-                    />
-                )) ||
+                {mediaFile != null ? (
+                    mediaFile.type.includes("image") ? (
+                        <CardMedia
+                            component="img"
+                            height="194"
+                            src={URL.createObjectURL(mediaFile)}
+                            alt="Paella dish"
+                        />
+                    ) : (
+                        <CardMedia
+                            component="video"
+                            controls
+                            height="194"
+                            src={URL.createObjectURL(mediaFile)}
+                        />
+                    )
+                ) :
                     ""}
                 <CardContent>
                     <Typography variant="body2" color="text.secondary">
@@ -237,10 +270,10 @@ function Post({ post, postOwner, comments, likes }: PostProps) {
                                     </Button>
                                 </>
                             )) || (
-                                <p style={{ textAlign: "center" }}>
-                                    Login to comment
-                                </p>
-                            )}
+                                    <p style={{ textAlign: "center" }}>
+                                        Login to comment
+                                    </p>
+                                )}
                         </Box>
                     </CardContent>
                 </Collapse>

@@ -72,10 +72,6 @@
                 });
             }
 
-            foreach (var post in postsData)
-            {
-            }
-
             return this.Ok(postsData);
         }
 

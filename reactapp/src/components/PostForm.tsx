@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { Box, Button, TextField } from "@mui/material";
 import useForm from "../hooks/useForm";
 import useFetch from "../hooks/useFetch";
-import { useUser } from "../hooks/stateHooks";
+import { usePosts, useUser } from "../hooks/stateHooks";
 
 import { FetchResults } from "../utils/Types";
 import MediaUpload from "./MediaUpload";
 import API_ENDPOINTS from "../utils/ApiRoutes";
 
 type FormValues = {
-    postID: number;
-    userID: number;
+    postId: number;
+    userId: number;
     text: string;
     mediaUrl: string;
     dateTimePosted: string;
@@ -24,9 +24,10 @@ type RegisterResponse = {
 
 function PostForm() {
     const { user } = useUser();
+    const { dispatch: setPosts } = usePosts();
     const { updateValues, onChange, onSubmit, values } = useForm<FormValues>(formSubmit, {
-        postID: 0,
-        userID: user.userId,
+        postId: 0,
+        userId: user.userId,
         text: "",
         mediaUrl: "",
         dateTimePosted: new Date().toISOString(),
@@ -72,7 +73,14 @@ function PostForm() {
 
     useEffect(() => {
         if (response) {
-            console.log("Response", response);
+            setPosts({
+                type: "addPost", payload: {
+                    post: response,
+                    postOwner: user,
+                    comments: [],
+                    likes: [],
+                }
+            });
         }
         if (mediaFile) {
             updateValues("mediaUrl", mediaFile.name);
@@ -96,20 +104,6 @@ function PostForm() {
                     />
                 </Box>
 
-                <input
-                    value={values.userID}
-                    onChange={onChange}
-                    type="hidden"
-                    name="userID"
-                    id="userID"
-                />
-                <input
-                    value={values.postID}
-                    onChange={onChange}
-                    type="hidden"
-                    name="postID"
-                    id="postID"
-                />
                 <input
                     value={values.mediaUrl}
                     onChange={onChange}
