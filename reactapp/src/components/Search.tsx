@@ -50,7 +50,7 @@ const SearchComponent = () => {
 
     const fetchUserProfiles = async () => {
         try {
-            const response = await axios.get<UserProfile[]>('https://localhost:7285/api/user-profiles');
+            const response = await axios.get<UserProfile[]>('https://localhost:7285/api/');
             setUserProfiles(response.data);
         } catch (error) {
             console.error(error);
@@ -71,13 +71,27 @@ const SearchComponent = () => {
                         {results.map((result, index) => {
                             const userProfile = getUserProfileById(result.userId);
                             return (
-                                <ListItem key={index}>
-                                    <ListItemButton component="a" href={`https://example.com/${result.postId}`} target="_blank" rel="noopener noreferrer">
-                                        {userProfile && (
-                                            <Avatar src={userProfile.avatarUrl} alt={`${userProfile.firstname} ${userProfile.lastname}`} />
-                                        )}
-                                        <ListItemText primary={result.text} secondary={userProfile ? userProfile.username : null} />
-                                    </ListItemButton>
+                                <ListItem
+                                    key={index}
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        '&:hover': {
+                                            backgroundColor: '#f5f5f5',
+                                        },
+                                    }}
+                                >
+                                    {userProfile && (
+                                        <Avatar src={userProfile.avatarUrl} alt={`${userProfile.firstname} ${userProfile.lastname}`} />
+                                    )}
+                                    <ListItemText
+                                        primary={result.text}
+                                        secondary={userProfile ? userProfile.username : null}
+                                        sx={{
+                                            marginLeft: '8px',
+                                            flexGrow: 1,
+                                        }}
+                                    />
                                 </ListItem>
                             );
                         })}
