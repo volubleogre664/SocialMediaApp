@@ -39,6 +39,7 @@
                 authUserId = savedChat.AuthUserId,
                 recievingAuthUserId = savedChat.RecievingAuthUserId,
                 text = savedChat.Text,
+                date = savedChat.Date
             };
 
             var chatResponseJson = JsonConvert.SerializeObject(chatResponse);

@@ -6,6 +6,9 @@ import Connector from "../signalr-connection";
 import { Button } from "@mui/material";
 import Contact from "../components/Contact";
 import Message from "../components/Message";
+import dayjs from 'dayjs';
+
+
 
 import "../styles/pages/Chat.css";
 
@@ -18,6 +21,7 @@ function Chat() {
     );
     const { newMessage, events, JoinGroup } = Connector();
     const [message, setMessage] = useState("");
+    
 
     const {
         fetchData: fetchContacts,
@@ -38,6 +42,7 @@ function Chat() {
     const handleContactClick = (contact: UserState) => () => {
         setCurrentContact(contact);
         JoinGroup(generateGroupName(user.authUserId, contact.authUserId));
+        console.log("This is contact: " + contact.firstName);
         fetchData();
 
         //console.log(user.authUserId + "has joined Group: " + generateGroupName(user.authUserId, contact.authUserId));
@@ -102,8 +107,6 @@ function Chat() {
         };
 
         newMessage(JSON.stringify(newChat), generateGroupName(user.authUserId, currentContact.authUserId));
-        /*newChat.text = "You got a new message bestie";
-        newMessage(JSON.stringify(newChat), "414fed45-e2a5-4643-a0ad-367aa0ced2a7");*/
 
         console.log("Form submitted", message);
 
@@ -148,7 +151,7 @@ function Chat() {
                                                     user.authUserId
                                                 }
                                                 key={chat.chatId}
-                                                timestamp={chat.date.toString()}
+                                                timestamp={dayjs(chat.date).format('YYYY-MM-DD HH:mm:ss')}
                                                 message={chat.text}
                                             />
                                         ))}
@@ -176,9 +179,9 @@ function Chat() {
                                     fontWeight: "bold",
                                 }}
                                 type="submit"
-                                onClick={() =>
+                              /*  onClick={() =>
                                     newMessage(message, "group Name")
-                                }
+                                }*/
                             >
                                 Send
                             </Button>
