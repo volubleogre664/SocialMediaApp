@@ -32,12 +32,13 @@ function Chat() {
         useFetch<ChatState[]>({
             url: "CHAT",
             method: "GET",
-            query: "?receiverId=" + user.authUserId +"&senderId=e22635c7-582c-4584-943c-d5f396f7f4fb",
+            query: "?receiverId=" + user.authUserId + "&senderId=" + currentContact?.authUserId,
         });
 
     const handleContactClick = (contact: UserState) => () => {
         setCurrentContact(contact);
         JoinGroup(generateGroupName(user.authUserId, contact.authUserId));
+        fetchData();
 
         //console.log(user.authUserId + "has joined Group: " + generateGroupName(user.authUserId, contact.authUserId));
     };
@@ -52,7 +53,6 @@ function Chat() {
     },[]);
 
     useEffect(() => {
-        fetchData();
         fetchContacts();
         //JoinGroup(user.authUserId);
     }, []);
@@ -102,8 +102,8 @@ function Chat() {
         };
 
         newMessage(JSON.stringify(newChat), generateGroupName(user.authUserId, currentContact.authUserId));
-        newChat.text = "You got a new message bestie";
-        newMessage(JSON.stringify(newChat), "414fed45-e2a5-4643-a0ad-367aa0ced2a7");
+        /*newChat.text = "You got a new message bestie";
+        newMessage(JSON.stringify(newChat), "414fed45-e2a5-4643-a0ad-367aa0ced2a7");*/
 
         console.log("Form submitted", message);
 
@@ -116,6 +116,7 @@ function Chat() {
                 <aside className="chat__sidebar">
                     <header className="chat__header">
                         <h1>Contacts</h1>
+                        
                     </header>
                     <main className="chats__aside-contacts">
                         {contacts.length &&
@@ -139,6 +140,7 @@ function Chat() {
                             if (chats.length) {
                                 return (
                                     <>
+                                        <h1> {user.firstName + " chatting with " + currentContact?.firstName}</h1>
                                         {chats.map((chat: ChatState) => (
                                             <Message
                                                 isMine={
@@ -146,7 +148,7 @@ function Chat() {
                                                     user.authUserId
                                                 }
                                                 key={chat.chatId}
-                                                timestamp={"12-01-01"}
+                                                timestamp={chat.date.toString()}
                                                 message={chat.text}
                                             />
                                         ))}

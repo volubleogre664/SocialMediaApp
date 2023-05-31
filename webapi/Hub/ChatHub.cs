@@ -14,10 +14,12 @@
     public class ChatHub : Hub
     {
         private readonly IChatService chatService;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public ChatHub(IChatService chatService)
+        public ChatHub(IChatService chatService, IHttpContextAccessor httpContextAccessor = null)
         {
             this.chatService = chatService;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async Task JoinGroup(string groupName)
@@ -46,6 +48,7 @@
 
         public async override System.Threading.Tasks.Task OnConnectedAsync()
         {
+          //  var userEmail = Context.User.Identity.Name;
             await Groups.AddToGroupAsync(Context.ConnectionId, "414fed45-e2a5-4643-a0ad-367aa0ced2a7");
             await base.OnConnectedAsync();
         }
