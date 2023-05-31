@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { List, ListItem, ListItemButton, ListItemText, Box, Paper, TextField, Avatar, Typography } from '@mui/material';
+import { List, ListItem, ListItemButton, ListItemText, Box, Paper, TextField, Avatar, ListItemAvatar, Typography } from '@mui/material';
 
 interface SearchResult {
     postID: number,
@@ -83,7 +83,9 @@ const SearchComponent = () => {
                                     }}
                                 >
                                     {userProfile && (
-                                        <Avatar src={userProfile.avatarUrl} alt={`${userProfile.firstName} ${userProfile.lastName}`} />
+                                        <ListItemAvatar>
+                                            <Avatar src={userProfile.avatarUrl} alt={`${userProfile.firstName} ${userProfile.lastName}`} />
+                                        </ListItemAvatar>
                                     )}
                                     <ListItemText
                                         primary={userProfile ? userProfile.firstName + ' ' + userProfile.lastName : 'Unknown User'}
