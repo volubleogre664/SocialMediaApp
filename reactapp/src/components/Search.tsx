@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { List, ListItem, ListItemButton, ListItemText, Box, Paper, TextField, Avatar } from '@mui/material';
+import { List, ListItem, ListItemButton, ListItemText, Box, Paper, TextField, Avatar, Typography } from '@mui/material';
 
 interface SearchResult {
     postId: number,
@@ -44,22 +44,24 @@ const SearchComponent = () => {
         }
     };
 
-    useEffect(() => {
-        fetchUserProfiles();
-    }, []);
-
     const fetchUserProfiles = async () => {
         try {
-            const response = await axios.get<UserProfile[]>('https://localhost:7285/api/');
+            const response = await axios.get<UserProfile[]>('https://localhost:7285/api/user/Get');
             setUserProfiles(response.data);
+            console.log(response.data);
         } catch (error) {
             console.error(error);
         }
     };
 
+    useEffect(() => {
+        fetchUserProfiles();
+    }, []);
+
     const getUserProfileById = (userId: number) => {
         const userProfile = userProfiles.find((profile) => profile.userId === userId);
-        return userProfile ? userProfile : null;
+        console.log('userProfile:', userProfile);
+        return userProfile || null;
     };
 
     return (
@@ -85,12 +87,19 @@ const SearchComponent = () => {
                                         <Avatar src={userProfile.avatarUrl} alt={`${userProfile.firstname} ${userProfile.lastname}`} />
                                     )}
                                     <ListItemText
-                                        primary={result.text}
-                                        secondary={userProfile ? userProfile.username : null}
-                                        sx={{
-                                            marginLeft: '8px',
-                                            flexGrow: 1,
-                                        }}
+                                        primary={userProfile ? userProfile.firstname : 'Unknown User'}
+                                        secondary={
+                                            <React.Fragment>
+                                                <Typography
+                                                    sx={{ display: 'inline' }}
+                                                    component="span"
+                                                    variant="body2"
+                                                    color="text.primary"
+                                                >
+                                                    {result.text}
+                                                </Typography>
+                                            </React.Fragment>
+                                        }
                                     />
                                 </ListItem>
                             );

@@ -5,7 +5,7 @@
     using Webapi.Interfaces;
 
     [ApiController]
-    [Route("/api/search")]
+    [Route("/api/[controller]")]
     public class SearchController : Controller
     {
         private readonly IPostService postService;

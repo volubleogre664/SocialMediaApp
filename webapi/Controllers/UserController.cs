@@ -27,6 +27,14 @@
             this.userService = userService;
         }
 
+        [HttpGet]
+        public IActionResult Get()
+        {
+            List<User> profiles = this.userService.GetAll();
+
+            return this.Ok(profiles);
+        }
+
         [HttpPost]
         [Authorize]
         public IActionResult Post(UserDataInput model)
