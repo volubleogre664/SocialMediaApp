@@ -45,11 +45,14 @@ namespace SocialMediaApp
             builder.Services.AddScoped<IValidator<LoginInput>, LoginInputValidator>();
             builder.Services.AddScoped<IValidator<UserDataInput>, UserDataInputValidator>();
             builder.Services.AddScoped<IValidator<Post>, PostValidator>();
+            builder.Services.AddScoped<IValidator<Like>, LikeValidator>();
+            builder.Services.AddScoped<IValidator<Comment>, CommentValidator>();
 
             builder.Services.AddScoped<IChatService, ChatService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IPostService, PostService>();
             builder.Services.AddScoped<ICommentService, CommentService>();
+            builder.Services.AddScoped<ILikeService, LikeService>();
 
             builder.Services.AddSignalR().AddAzureSignalR();
 

@@ -1,7 +1,7 @@
 ﻿namespace Webapi.Controllers
 {
     using System.Collections.Generic;
-
+    using System.Linq;
     using FluentValidation;
     using FluentValidation.AspNetCore;
 
@@ -16,19 +16,67 @@
     public class PostsController : ControllerBase
     {
         private readonly IPostService postService;
+        private readonly IUserService userService;
+        private readonly ILikeService likeService;
+        private readonly ICommentService commentService;
         private readonly IValidator<Post> validator;
 
-        public PostsController(IPostService postService, IValidator<Post> validator)
+        public PostsController(
+            IPostService postService,
+            IValidator<Post> validator,
+            IUserService userService,
+            ILikeService likeService,
+            ICommentService commentService)
         {
             this.postService = postService;
             this.validator = validator;
+            this.userService = userService;
+            this.likeService = likeService;
+            this.commentService = commentService;
         }
 
         // GET: api/Posts
         [HttpGet]
-        public ActionResult<IEnumerable<Post>> GetPost()
+        public IActionResult GetPost()
         {
-            return this.postService.GetAll();
+            var posts = this.postService.GetAll();
+
+            var postsData = new List<object>();
+
+            foreach (var post in posts)
+            {
+                var postOwner = this.userService.GetById(post.UserId);
+                var likes = this.likeService.FindAllByField("PostId", post.PostId);
+                var comments = this.commentService.FindAllByField("PostId", post.PostId);
+
+                postsData.Add(new
+                {
+                    Post = post,
+                    Likes = likes,
+                    Comments = comments.Select(_ =>
+                    {
+                        var commentAuthor = this.userService.GetById(_.UserId);
+
+                        return new
+                        {
+                            _.UserId,
+                            _.CommentId,
+                            _.PostId,
+                            _.DateTimePosted,
+                            _.Text,
+                            AuthorFirstName = commentAuthor.FirstName,
+                            AuthorLastName = commentAuthor.LastName,
+                        };
+                    }),
+                    PostOwner = postOwner,
+                });
+            }
+
+            foreach (var post in postsData)
+            {
+            }
+
+            return this.Ok(postsData);
         }
 
         // GET: api/Posts/5
@@ -49,7 +97,7 @@
         [HttpPut("{id}")]
         public IActionResult PutPost(int id, Post post)
         {
-            if (id != post.PostID)
+            if (id != post.PostId)
             {
                 return this.BadRequest();
             }
@@ -87,7 +135,7 @@
 
             this.postService.Add(post);
 
-            return this.CreatedAtAction("GetPost", new { id = post.PostID }, post);
+            return this.CreatedAtAction("GetPost", new { id = post.PostId }, post);
         }
 
         // DELETE: api/Posts/5

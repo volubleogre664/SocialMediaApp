@@ -2,16 +2,21 @@
 {
     using FluentValidation;
     using Webapi.Models;
-    using Webapi.Models.Inputs;
 
-    public class CommentValidator : AbstractValidator<Post>
+    public class CommentValidator : AbstractValidator<Comment>
     {
         public CommentValidator()
         {
-            this.RuleFor(_ => _.UserID)
-                .NotNull();
+            this.RuleFor(_ => _.UserId)
+                .NotEmpty();
 
             this.RuleFor(_ => _.Text)
+                .NotEmpty();
+
+            this.RuleFor(_ => _.DateTimePosted)
+                .NotEmpty();
+
+            this.RuleFor(_ => _.PostId)
                 .NotEmpty();
         }
     }

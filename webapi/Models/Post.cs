@@ -7,10 +7,10 @@
     {
         [Key]
         [Column("pkPostID")]
-        public int PostID { get; set; }
+        public int PostId { get; set; }
 
         [Column("fkUserId")]
-        public int UserID { get; set; }
+        public int UserId { get; set; }
 
         public string Text { get; set; }
 

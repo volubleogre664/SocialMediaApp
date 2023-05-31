@@ -11,7 +11,7 @@
             this.RuleFor(_ => _.Text)
                 .NotEmpty();
 
-            this.RuleFor(_ => _.UserID)
+            this.RuleFor(_ => _.UserId)
                 .GreaterThan(0);
 
             this.RuleFor(_ => _.DateTimePosted)
