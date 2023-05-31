@@ -12,7 +12,7 @@ interface SearchResult {
 
 interface UserProfile {
     userId: number,
-    authUserId: number,
+    authUserId: string,
     username: string,
     firstname: string,
     lastname: string,
