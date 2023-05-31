@@ -155,7 +155,7 @@ function Chat() {
                                     </>
                                 );
                             } else {
-                                return <h4> Messages Loading... </h4>;
+                                return <h4> Select a user to message </h4>;
                             }
                         })()}
                     </main>
