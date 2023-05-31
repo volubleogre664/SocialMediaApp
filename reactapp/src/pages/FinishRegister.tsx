@@ -41,6 +41,7 @@ function FinishRegister() {
 
     const { loading, error, response, fetchData } = useFetch<UserState>({
         url: "FINALIZE_REGISTER",
+        query: "",
         method: "POST",
         body: values,
     });

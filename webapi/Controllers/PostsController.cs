@@ -1,48 +1,41 @@
 ﻿namespace Webapi.Controllers
 {
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
+
+    using FluentValidation;
+    using FluentValidation.AspNetCore;
 
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
-    using Webapi.Data;
+    using Webapi.Interfaces;
     using Webapi.Models;
 
     [Route("api/[controller]")]
     [ApiController]
     public class PostsController : ControllerBase
     {
-        private readonly ApplicationDbContext context;
+        private readonly IPostService postService;
+        private readonly IValidator<Post> validator;
 
-        public PostsController(ApplicationDbContext context)
+        public PostsController(IPostService postService, IValidator<Post> validator)
         {
-            this.context = context;
+            this.postService = postService;
+            this.validator = validator;
         }
 
         // GET: api/Posts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Post>>> GetPost()
+        public ActionResult<IEnumerable<Post>> GetPost()
         {
-            if (this.context.Post == null)
-            {
-                return this.NotFound();
-            }
-
-            return await this.context.Post.ToListAsync();
+            return this.postService.GetAll();
         }
 
         // GET: api/Posts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Post>> GetPost(int id)
+        public ActionResult<Post> GetPost(int id)
         {
-            if (this.context.Post == null)
-            {
-                return this.NotFound();
-            }
-
-            var post = await this.context.Post.FindAsync(id);
+            var post = this.postService.GetById(id);
 
             if (post == null)
             {
@@ -53,20 +46,17 @@
         }
 
         // PUT: api/Posts/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPost(int id, Post post)
+        public IActionResult PutPost(int id, Post post)
         {
             if (id != post.PostID)
             {
                 return this.BadRequest();
             }
 
-            this.context.Entry(post).State = EntityState.Modified;
-
             try
             {
-                await this.context.SaveChangesAsync();
+                this.postService.Update(post);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -84,45 +74,40 @@
         }
 
         // POST: api/Posts
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Post>> PostPost(Post post)
+        public ActionResult<Post> PostPost(Post post)
         {
-          if (this.context.Post == null)
-          {
-              return this.Problem("Entity set 'ApplicationDbContext.Post'  is null.");
-          }
+            var validationResult = this.validator.Validate(post);
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(this.ModelState);
 
-          this.context.Post.Add(post);
-          await this.context.SaveChangesAsync();
+                return this.BadRequest(this.ModelState);
+            }
 
-          return this.CreatedAtAction("GetPost", new { id = post.PostID }, post);
+            this.postService.Add(post);
+
+            return this.CreatedAtAction("GetPost", new { id = post.PostID }, post);
         }
 
         // DELETE: api/Posts/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePost(int id)
+        public IActionResult DeletePost(int id)
         {
-            if (this.context.Post == null)
-            {
-                return this.NotFound();
-            }
-
-            var post = await this.context.Post.FindAsync(id);
+            var post = this.postService.GetById(id);
             if (post == null)
             {
                 return this.NotFound();
             }
 
-            this.context.Post.Remove(post);
-            await this.context.SaveChangesAsync();
+            this.postService.Delete(id);
 
             return this.NoContent();
         }
 
         private bool PostExists(int id)
         {
-            return (this.context.Post?.Any(e => e.PostID == id)).GetValueOrDefault();
+            return this.postService.GetById(id) != null;
         }
     }
 }

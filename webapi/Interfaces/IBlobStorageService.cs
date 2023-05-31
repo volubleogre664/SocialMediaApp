@@ -2,8 +2,10 @@
 {
     public interface IBlobStorageService
     {
-        public Task UploadMediaFileAsync(Stream fileStream, string containerName, string blobName);
+        public Task UploadMediaFileAsync(Stream fileStream, string blobName, string contentType);
 
-        public Task<Stream> GetMediaFileAsync(string containerName, string blobName);
+        public Task<Stream> GetMediaFileAsync(string blobName);
+
+        public Task<string> GetMediaTypeAsync(string blobName);
     }
 }

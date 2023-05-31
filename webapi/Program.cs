@@ -1,7 +1,7 @@
 namespace SocialMediaApp
 {
     using System.Text;
-    using Azure.Storage.Blobs.Models;
+
     using FluentValidation;
 
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,9 +11,11 @@ namespace SocialMediaApp
     using Microsoft.Extensions.Azure;
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
+
     using Webapi.Data;
     using Webapi.Hub;
     using Webapi.Interfaces;
+    using Webapi.Models;
     using Webapi.Models.Inputs;
     using Webapi.Services;
     using Webapi.Validators;
@@ -42,6 +44,7 @@ namespace SocialMediaApp
             builder.Services.AddScoped<IValidator<RegisterInput>, RegisterInputValidator>();
             builder.Services.AddScoped<IValidator<LoginInput>, LoginInputValidator>();
             builder.Services.AddScoped<IValidator<UserDataInput>, UserDataInputValidator>();
+            builder.Services.AddScoped<IValidator<Post>, PostValidator>();
 
             builder.Services.AddScoped<IChatService, ChatService>();
             builder.Services.AddScoped<IUserService, UserService>();

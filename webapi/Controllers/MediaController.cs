@@ -17,9 +17,14 @@
         [HttpPost]
         public async Task<IActionResult> UploadMedia(IFormFile file)
         {
+            if (file == null || file.Length == 0)
+            {
+                return this.BadRequest("No file uploaded");
+            }
+
             using (var fileStream = file.OpenReadStream())
             {
-                await this.blobStorageService.UploadMediaFileAsync(fileStream, "media-container", file.FileName);
+                await this.blobStorageService.UploadMediaFileAsync(fileStream, file.FileName, file.ContentType);
             }
 
             return this.Ok();
@@ -28,14 +33,16 @@
         [HttpGet("{blobName}")]
         public async Task<IActionResult> GetMedia(string blobName)
         {
-            Stream fileStream = await this.blobStorageService.GetMediaFileAsync("media-container", blobName);
+            Stream fileStream = await this.blobStorageService.GetMediaFileAsync(blobName);
 
             if (fileStream == null)
             {
                 return this.NotFound();
             }
 
-            return this.File(fileStream, "application/octet-stream");
+            var contentType = await this.blobStorageService.GetMediaTypeAsync(blobName);
+
+            return this.File(fileStream, contentType, blobName);
         }
     }
 }
