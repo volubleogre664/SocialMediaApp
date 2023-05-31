@@ -3,19 +3,19 @@ import axios from 'axios';
 import { List, ListItem, ListItemButton, ListItemText, Box, Paper, TextField, Avatar, Typography } from '@mui/material';
 
 interface SearchResult {
-    postId: number,
-    userId: number,
+    postID: number,
+    userID: number,
     text: string,
-    dateTimePosted: Date,
-    mediaUrl: string
+    DateTimePosted: Date,
+    MediaUrl: string
 }
 
 interface UserProfile {
     userId: number,
     authUserId: string,
     username: string,
-    firstname: string,
-    lastname: string,
+    firstName: string,
+    lastName: string,
     avatarUrl: string
 }
 
@@ -37,7 +37,6 @@ const SearchComponent = () => {
             const response = await axios.get('https://localhost:7285/api/search', {
                 params: { keyword: newKeyword }
             });
-
             setResults(response.data);
         } catch (error) {
             console.error(error);
@@ -60,7 +59,7 @@ const SearchComponent = () => {
 
     const getUserProfileById = (userId: number) => {
         const userProfile = userProfiles.find((profile) => profile.userId === userId);
-        console.log('userProfile:', userProfile);
+        //console.log(userId);
         return userProfile || null;
     };
 
@@ -71,7 +70,7 @@ const SearchComponent = () => {
                 <Paper>
                     <List>
                         {results.map((result, index) => {
-                            const userProfile = getUserProfileById(result.userId);
+                            const userProfile = getUserProfileById(result.userID);
                             return (
                                 <ListItem
                                     key={index}
@@ -84,10 +83,10 @@ const SearchComponent = () => {
                                     }}
                                 >
                                     {userProfile && (
-                                        <Avatar src={userProfile.avatarUrl} alt={`${userProfile.firstname} ${userProfile.lastname}`} />
+                                        <Avatar src={userProfile.avatarUrl} alt={`${userProfile.firstName} ${userProfile.lastName}`} />
                                     )}
                                     <ListItemText
-                                        primary={userProfile ? userProfile.firstname : 'Unknown User'}
+                                        primary={userProfile ? userProfile.firstName + ' ' + userProfile.lastName : 'Unknown User'}
                                         secondary={
                                             <React.Fragment>
                                                 <Typography
