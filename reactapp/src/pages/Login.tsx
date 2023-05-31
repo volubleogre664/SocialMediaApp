@@ -29,6 +29,7 @@ function Login() {
     const { loading, error, fetchData, response }: FetchResults =
         useFetch<LoginResponse>({
             url: "LOGIN",
+            query: "",
             method: "POST",
             body: values,
         });
