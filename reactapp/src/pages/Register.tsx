@@ -36,6 +36,7 @@ function Register() {
     const { loading, error, fetchData, response }: FetchResults =
         useFetch<RegisterResponse>({
             url: "REGISTER",
+            query: "",
             method: "POST",
             body: values
         });

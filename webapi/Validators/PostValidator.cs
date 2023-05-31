@@ -18,9 +18,6 @@
                 .NotNull()
                 .LessThan(DateTime.Now.AddDays(1).Date)
                 .WithMessage($"Date Cannot be On or After {DateTime.Now.AddDays(1).ToShortDateString()}");
-
-            this.RuleFor(_ => _.MediaUrl)
-                .NotEmpty();
         }
     }
 }
