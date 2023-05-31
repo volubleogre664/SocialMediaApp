@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Box, Button, TextField } from "@mui/material";
 import useForm from "../hooks/useForm";
 import useFetch from "../hooks/useFetch";
+import { useUser } from "../hooks/stateHooks";
 
 import { FetchResults } from "../utils/Types";
 import MediaUpload from "./MediaUpload";
@@ -22,9 +23,10 @@ type RegisterResponse = {
 
 
 function PostForm() {
+    const { user } = useUser();
     const { updateValues, onChange, onSubmit, values } = useForm<FormValues>(formSubmit, {
         postID: 0,
-        userID: 0,
+        userID: user.userId,
         text: "",
         mediaUrl: "",
         dateTimePosted: new Date().toISOString(),
