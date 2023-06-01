@@ -36,6 +36,9 @@ function Home() {
         <div className="home">
             <div className="home__container">
                 <Search />
+                <br />
+                <br />
+                <br />
                 <h1>This is the Home page</h1>
                 <PostForm />
                 <main className="home__main">

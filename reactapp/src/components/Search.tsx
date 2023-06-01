@@ -65,8 +65,8 @@ const SearchComponent = () => {
     };
 
     return (
-        <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-            <TextField variant="outlined" id="outlined-basic" value={keyword} onChange={handleSearch} placeholder="Search for a post..." />
+        <Box sx={{ width: '100%', maxWidth: 300, bgcolor: 'background.paper', position: 'fixed', zIndex: 9999 }}>
+            <TextField sx={{ width: '100%' }} variant="outlined" id="outlined-basic" value={keyword} onChange={handleSearch} placeholder="Search for a post..." />
             {keyword !== '' && (
                 <Paper>
                     <List>
@@ -80,7 +80,7 @@ const SearchComponent = () => {
                                         alignItems: 'center',
                                         '&:hover': {
                                             backgroundColor: '#f5f5f5',
-                                        },
+                                        }
                                     }}
                                 >
                                     {userProfile && (
