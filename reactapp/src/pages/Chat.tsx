@@ -15,21 +15,15 @@ import "../styles/pages/Chat.css";
 function Chat() {
     const { user } = useUser();
     const { contacts, dispatch: setContacts } = useContacts();
-    const { chats, dispatch: setChats } = useChats();
-    const [currentContact, setCurrentContact] = useState<UserState | null>(
-        null
-    );
+    const { chats, dispatch: setChats, currentContact } = useChats();
     const { newMessage, events, JoinGroup } = Connector();
     const [message, setMessage] = useState("");
-    
 
-    const {
-        fetchData: fetchContacts,
-        response: contactsResponse,
-        setResponse: setContactResponse
-    }: FetchResults = useFetch<UserState[]>({
+    const { fetchData: fetchContacts, response: contactsResponse, setResponse: setContactResponse }:
+        FetchResults = useFetch<UserState[]>({
         url: "CONTACTS",
         method: "GET",
+        query: "?userId=" + user.authUserId
     });
 
     const { loading, error, fetchData, response, setResponse: setChatResponse }: FetchResults =
@@ -39,14 +33,30 @@ function Chat() {
             query: "?receiverId=" + user.authUserId + "&senderId=" + currentContact?.authUserId,
         });
 
+    console.log("Value of currentContact at start: " + currentContact);
+    console.log("Value of Chats at start: " + chats);
+    if (response != null) {
+        console.log("Value of response at start: " + response);
+    }
+    else { 
+        console.log("Value of response is null");
+    }
+
     const handleContactClick = (contact: UserState) => () => {
-        setCurrentContact(contact);
+        setChats({
+            type: "setCurrentContact", payload: contact
+        })
         JoinGroup(generateGroupName(user.authUserId, contact.authUserId));
-        console.log("This is contact: " + contact.firstName);
-        fetchData();
+
 
         //console.log(user.authUserId + "has joined Group: " + generateGroupName(user.authUserId, contact.authUserId));
     };
+
+    useEffect(() => {
+        if (currentContact != null) {
+            fetchData();
+        }
+    },[currentContact])
 
     useEffect(() => {
         events((message) => {
@@ -64,8 +74,6 @@ function Chat() {
 
     useEffect(() => {
         if (response) {
-            console.log("Response", response);
-            console.log(response);
             setChats({ type: "setChats", payload: response });
         }
 
@@ -118,7 +126,7 @@ function Chat() {
             <section className="chat__container">
                 <aside className="chat__sidebar">
                     <header className="chat__header">
-                        <h1>Contacts</h1>
+                        <h1>Contacts {" - " + user.firstName}</h1>
                         
                     </header>
                     <main className="chats__aside-contacts">
@@ -129,13 +137,14 @@ function Chat() {
                                     picture={contact.avatarUrl}
                                     name={`${contact.firstName} ${contact.lastName}`}
                                     onClick={handleContactClick(contact)}
+                                    isActive={currentContact?.userId == contact.userId}
                                 />
                             ))}
                     </main>
                 </aside>
                 <main className="chat__main">
                     <header className="chat__header">
-                        <h1>Chat</h1>
+                        <h1>{ currentContact && currentContact?.firstName || ""}</h1>
                     </header>
 
                     <main className="chat__messages">
@@ -143,7 +152,6 @@ function Chat() {
                             if (chats.length) {
                                 return (
                                     <>
-                                        <h1> {user.firstName + " chatting with " + currentContact?.firstName}</h1>
                                         {chats.map((chat: ChatState) => (
                                             <Message
                                                 isMine={
@@ -151,7 +159,7 @@ function Chat() {
                                                     user.authUserId
                                                 }
                                                 key={chat.chatId}
-                                                timestamp={dayjs(chat.date).format('YYYY-MM-DD HH:mm:ss')}
+                                                timestamp={dayjs(chat.date).format('DD MMM, HH:mm')}
                                                 message={chat.text}
                                             />
                                         ))}
@@ -163,30 +171,35 @@ function Chat() {
                         })()}
                     </main>
 
-                    <footer className="chat__footer">
-                        <form onSubmit={formSubmit}>
-                            <input
-                                value={message}
-                                onChange={(e) => setMessage(e.target.value)}
-                                type="text"
-                                placeholder="Type a message"
-                            />
-                            <Button
-                                style={{
-                                    backgroundColor: "white",
-                                    borderRadius: "0px",
-                                    color: "black",
-                                    fontWeight: "bold",
-                                }}
-                                type="submit"
-                              /*  onClick={() =>
-                                    newMessage(message, "group Name")
-                                }*/
-                            >
-                                Send
-                            </Button>
-                        </form>
-                    </footer>
+                        {(() => {
+                            if (currentContact != null) {
+                                return (
+                                    <footer className="chat__footer">
+                                    <>
+                                        <form onSubmit={formSubmit}>
+                                            <input
+                                                value={message}
+                                                onChange={(e) => setMessage(e.target.value)}
+                                                type="text"
+                                                placeholder="Type a message"
+                                            />
+                                            <Button
+                                                style={{
+                                                    backgroundColor: "white",
+                                                    borderRadius: "0px",
+                                                    color: "black",
+                                                    fontWeight: "bold",
+                                                }}
+                                                type="submit"
+                                            >
+                                                Send
+                                            </Button>
+                                        </form> 
+                                        </>
+                                    </footer>
+                                )
+                            }
+                        })()}
                 </main>
             </section>
         </div>

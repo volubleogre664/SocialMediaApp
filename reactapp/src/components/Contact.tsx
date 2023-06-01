@@ -6,6 +6,7 @@ type Props = {
     name: string;
     picture: string;
     onClick: () => void;
+    isActive: boolean;
 };
 
 // Generate a color from a string
@@ -40,11 +41,11 @@ function stringAvatar(name: string) {
     };
 }
 
-function Contact({ name, picture, onClick }: Props) {
+function Contact({ name, picture, onClick, isActive }: Props) {
     const sizes: any = {};
 
     return (
-        <div className="contact" onClick={onClick}>
+        <div className={`contact ${isActive && "active" || ""}`} onClick={onClick}>
             <div className="contact__main">
                 <div>
                     {picture ? (
