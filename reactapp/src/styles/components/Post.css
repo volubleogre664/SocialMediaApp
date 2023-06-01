@@ -1,0 +1,49 @@
+.post {
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.post__btn > span {
+    margin-left: 4px;
+    font-size: 1rem;
+}
+
+.post__comments {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.post__comment {
+    padding: 15px;
+    border: 1px solid #ccc;
+}
+
+.post__commentDate {
+    margin-top: 5px;
+    font-weight: bold;
+    display: block;
+    width: fit-content;
+    margin-left: auto;
+    font-size: 0.7rem;
+    color: var(--secondary-color);
+}
+
+.post__commentSend {
+    height: 56px;
+    align-self: flex-end;
+}
+
+.post__commentForm {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+    gap: 10px;
+}
+
+.post .MuiSvgIcon-root {
+    font-size: 1.75rem !important;
+    color: var(--primary-color);
+    cursor: pointer;
+}

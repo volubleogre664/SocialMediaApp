@@ -12,6 +12,37 @@ type FetchResults = {
     fetchData: () => void;
 };
 
+type Comment = {
+    authorFirstName: string;
+    authorLastName: string;
+    commentId: number;
+    postId: number;
+    userId: number;
+    text: string;
+    date: Date;
+};
+
+type Like = {
+    likeId: number;
+    postId: number;
+    userId: number;
+};
+
+type PostType = {
+    postId: number;
+    userId: number;
+    text: string;
+    dateTimePosted: Date;
+    mediaUrl?: string;
+};
+
+type PostState = {
+    post: PostType;
+    postOwner: UserState;
+    comments: Comment[];
+    likes: Like[];
+};
+
 type UserState = {
     authUserId: string;
     userId: number;
@@ -21,4 +52,12 @@ type UserState = {
     avatarUrl: string;
 };
 
-export type { FetchData, FetchResults, UserState };
+export type {
+    FetchData,
+    FetchResults,
+    UserState,
+    PostState,
+    Comment,
+    Like,
+    PostType,
+};

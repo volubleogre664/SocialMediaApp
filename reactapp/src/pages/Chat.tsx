@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Axios from "axios";
 import useFetch from "../hooks/useFetch";
 import { FetchResults } from "../utils/Types";
 import Connector from "../signalr-connection";
@@ -10,36 +9,33 @@ import Message from "../components/Message";
 import "../styles/pages/Chat.css";
 
 type ChatResponse = {
-    chatId?: number,
-    authUserId?: string,
-    recievingAuthUserId?: string,
-    text: string,
-    date: Date
+    chatId?: number;
+    authUserId?: string;
+    recievingAuthUserId?: string;
+    text: string;
+    date: Date;
 };
 
 function Chat() {
     const { newMessage, events } = Connector();
     const [message, setMessage] = useState("");
 
-    const { loading, error, fetchData, response }: FetchResults =
-        useFetch<ChatResponse[]>({
-            url: "CHAT",
-            method: "GET",
-            query: "?userId=EX100"
-        });
+    const { loading, error, fetchData, response }: FetchResults = useFetch<
+        ChatResponse[]
+    >({
+        url: "CHAT",
+        method: "GET",
+        query: "?userId=EX100",
+    });
 
     useEffect(() => {
-
-        fetchData()
-
-    },[]);
+        fetchData();
+    }, []);
 
     useEffect(() => {
-
         if (response) {
             console.log("Response", response);
         }
-
     }, [response]);
 
     function formSubmit(e: any) {
@@ -90,16 +86,14 @@ function Chat() {
                                     {response.map((chat: ChatResponse) => (
                                         <Message
                                             isMine={false}
-                                            timestamp={(chat.date).toString()}
+                                            timestamp={chat.date.toString()}
                                             message={chat.text}
                                         />
                                     ))}
                                 </main>
-                            )
+                            );
                         } else {
-                            return (
-                                <h4> Messages Loading... </h4>
-                            )
+                            return <h4> Messages Loading... </h4>;
                         }
                     })()}
 

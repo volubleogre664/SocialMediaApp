@@ -11,6 +11,8 @@ const URLS: ApiRoutes = {
     FINALIZE_REGISTER: "/api/user/post",
     CHAT: "/api/Chat",
     POSTS: "/api/posts",
+    LIKE: "/api/like",
+    COMMENT: "/api/comment",
     MEDIA: "/api/media",
 };
 

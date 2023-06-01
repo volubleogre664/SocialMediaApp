@@ -33,7 +33,7 @@ function MediaUpload({ mediaFileGetter }: MediaUploadProps) {
             <form>
                 <input ref={fileInput} style={{ display: "none" }} type="file"
                     id="avatar" name="avatar"
-                    accept="image/png, image/jpeg" onChange={onChange} />
+                    accept="image/*, video/*" onChange={onChange} />
                 <Button variant="contained" onClick={(_) => {
                     fileInput.current?.click();
                 }}>
