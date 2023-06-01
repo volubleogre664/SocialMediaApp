@@ -14,9 +14,9 @@ import useFetch from "../hooks/useFetch";
 import { usePosts, useUser } from "../hooks/stateHooks";
 
 import { FetchResults } from "../utils/Types";
-import MediaUpload from "./MediaUpload";
 import API_ENDPOINTS from "../utils/ApiRoutes";
 import MediaPreview from "./MediaPreview";
+import MediaUpload from "./MediaUpload";
 
 type FormValues = {
     postId: number;
@@ -61,7 +61,7 @@ function PostForm() {
     const [mediaFile, setMediaFile] = useState<File | null>(null);
     const mediaInput = useRef<HTMLInputElement | null>(null);
 
-    const { loading, error, fetchData, response }: FetchResults =
+    const { loading, error, fetchData, response, setResponse }: FetchResults =
         useFetch<RegisterResponse>({
             url: "POSTS",
             query: "",
@@ -74,13 +74,13 @@ function PostForm() {
         fetchData();
     }
 
-    async function uploadMediaFile() {
-        if (!mediaFile) {
-            return;
+    async function uploadMediaFile(): Promise<boolean> {
+        if (!mediaValues.mediaFile) {
+            return false;
         }
 
         const formData = new FormData();
-        formData.append("file", mediaFile);
+        formData.append("file", mediaValues.mediaFile);
 
         const url = API_ENDPOINTS["MEDIA"];
         try {
@@ -88,11 +88,11 @@ function PostForm() {
                 method: "POST",
                 body: formData,
             });
-            console.log(mediaFile.name);
-            if (res.ok) updateValues("mediaUrl", mediaFile.name);
-        } catch (error) {}
 
-        console.log(values);
+            return res.ok;
+        } catch (error) {
+            return false;
+        }
     }
 
     useEffect(() => {
@@ -109,10 +109,17 @@ function PostForm() {
 
             updateValues("text", "");
         }
-        if (mediaFile) {
-            updateValues("mediaUrl", mediaFile.name);
-        }
-    }, [response, mediaFile]);
+        return () => {
+            setResponse(null);
+        };
+    }, [response]);
+
+    useEffect(() => {
+        updateValues(
+            "mediaUrl",
+            mediaValues.mediaFile ? mediaValues.mediaFile.name : ""
+        );
+    }, [mediaValues.mediaFile]);
 
     return (
         <div>
@@ -152,6 +159,7 @@ function PostForm() {
                         onChange={mediaOnChange}
                     />
                     <IconButton
+                        disabled={mediaValues.mediaFile != null}
                         onClick={(_) => {
                             mediaInput.current?.click();
                         }}
@@ -160,6 +168,7 @@ function PostForm() {
                     </IconButton>
 
                     <Button
+                        disabled={!(values.text || mediaValues.mediaFile)}
                         variant="contained"
                         onClick={(e: any) => formSubmit()}
                     >

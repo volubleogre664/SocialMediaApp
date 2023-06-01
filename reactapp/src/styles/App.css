@@ -12,3 +12,7 @@
     overflow: hidden;
     position: relative;
 }
+
+.search__result:hover {
+    cursor: pointer;
+}

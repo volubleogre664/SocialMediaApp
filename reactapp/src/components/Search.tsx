@@ -3,7 +3,6 @@ import axios from "axios";
 import {
     List,
     ListItem,
-    ListItemButton,
     ListItemText,
     Box,
     Paper,
@@ -118,6 +117,7 @@ const SearchComponent = () => {
                             return (
                                 <ListItem
                                     key={index}
+                                    className="search__result"
                                     onClick={() => viewPost(result.postId)}
                                     sx={{
                                         display: "flex",
