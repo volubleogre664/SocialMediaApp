@@ -3,8 +3,8 @@ import axios from 'axios';
 import { List, ListItem, ListItemButton, ListItemText, Box, Paper, TextField, Avatar, ListItemAvatar, Typography } from '@mui/material';
 
 interface SearchResult {
-    postID: number,
-    userID: number,
+    postId: number,
+    userId: number,
     text: string,
     DateTimePosted: Date,
     MediaUrl: string
@@ -37,6 +37,7 @@ const SearchComponent = () => {
             const response = await axios.get('https://localhost:7285/api/search', {
                 params: { keyword: newKeyword }
             });
+            //console.log(response.data)
             setResults(response.data);
         } catch (error) {
             console.error(error);
@@ -47,7 +48,7 @@ const SearchComponent = () => {
         try {
             const response = await axios.get<UserProfile[]>('https://localhost:7285/api/user/Get');
             setUserProfiles(response.data);
-            console.log(response.data);
+            //console.log(response.data);
         } catch (error) {
             console.error(error);
         }
@@ -70,7 +71,7 @@ const SearchComponent = () => {
                 <Paper>
                     <List>
                         {results.map((result, index) => {
-                            const userProfile = getUserProfileById(result.userID);
+                            const userProfile = getUserProfileById(result.userId);
                             return (
                                 <ListItem
                                     key={index}

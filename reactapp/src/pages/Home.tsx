@@ -4,6 +4,7 @@ import Post from "../components/Post";
 import useFetch from "../hooks/useFetch";
 import { usePosts } from "../hooks/stateHooks";
 import { PostState } from "../utils/Types";
+import Search from "../components/Search"
 
 import "../styles/pages/Home.css";
 
@@ -34,6 +35,7 @@ function Home() {
     return (
         <div className="home">
             <div className="home__container">
+                <Search />
                 <h1>This is the Home page</h1>
                 <PostForm />
                 <main className="home__main">
