@@ -130,7 +130,7 @@ function PostForm() {
                         <ImageIcon color={mediaValues.mediaFile ? "disabled" : "primary"} />
                     </IconButton>
 
-                    <Button variant="contained" onClick={(e: any) => formSubmit()}>
+                    <Button disabled={!(values.text || mediaValues.mediaFile)} variant="contained" onClick={(e: any) => formSubmit()}>
                         Create Post
                     </Button>
                 </CardActions>
