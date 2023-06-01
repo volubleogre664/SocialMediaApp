@@ -4,6 +4,7 @@
 
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.CodeAnalysis.Differencing;
+    using Newtonsoft.Json;
     using Webapi.Data;
     using Webapi.Interfaces;
     using Webapi.Models;
@@ -13,41 +14,44 @@
     public class ChatHub : Hub
     {
         private readonly IChatService chatService;
-/*        private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly AuthDbContext authContext;*/
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public ChatHub(
-            IChatService chatService
-   /*         IHttpContextAccessor httpContextAccessor,
-            AuthDbContext authContext*/)
+        public ChatHub(IChatService chatService, IHttpContextAccessor httpContextAccessor = null)
         {
             this.chatService = chatService;
-            /*this.httpContextAccessor = httpContextAccessor;
-            this.authContext = authContext;*/
+            this.httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task NewMessage(string user, string message)
+        public async Task JoinGroup(string groupName)
         {
-            await Clients.All.SendAsync("messageReceived", user, message);
-/*            var userEmail = this.httpContextAccessor.HttpContext!.User.Identity!.Name;
-            var authUser = this.authContext.Users.FirstOrDefault(_ => _.Email == userEmail);*/
+            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+        }
 
-            var chat = new Chat()
+
+        public async Task SendToGroup(string groupName, string message)
+        {
+            var chat = JsonConvert.DeserializeObject<Chat>(message);
+            var savedChat = await this.chatService.AddChat(chat);
+
+            var chatResponse = new ChatResponse()
             {
-                AuthUserId = "EX100",
-                RecievingAuthUserId = "EX200",
-                Text = message,
-                Date = DateTime.Now,
+                chatId = savedChat.ChatId,
+                authUserId = savedChat.AuthUserId,
+                recievingAuthUserId = savedChat.RecievingAuthUserId,
+                text = savedChat.Text,
+                date = savedChat.Date
             };
 
-            this.chatService.Add(chat);
+            var chatResponseJson = JsonConvert.SerializeObject(chatResponse);
+
+            await Clients.Group(groupName).SendAsync("Send", chatResponseJson);
         }
 
-        public Task BroadcastMessage(string name, string message) =>
-            Clients.All.SendAsync("broadcastMessage", name, message);
-
-        public Task Echo(string name, string message) =>
-            Clients.Client(Context.ConnectionId)
-                   .SendAsync("echo", name, $"{message} (echo from server)");
+        public async override System.Threading.Tasks.Task OnConnectedAsync()
+        {
+          //  var userEmail = Context.User.Identity.Name;
+            await Groups.AddToGroupAsync(Context.ConnectionId, "414fed45-e2a5-4643-a0ad-367aa0ced2a7");
+            await base.OnConnectedAsync();
+        }
     }
 }

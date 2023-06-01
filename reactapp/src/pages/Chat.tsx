@@ -1,48 +1,114 @@
 import { useEffect, useState } from "react";
 import useFetch from "../hooks/useFetch";
-import { FetchResults } from "../utils/Types";
+import { useUser, useContacts, useChats } from "../hooks/stateHooks";
+import { FetchResults, UserState, ChatState } from "../utils/Types";
 import Connector from "../signalr-connection";
 import { Button } from "@mui/material";
 import Contact from "../components/Contact";
 import Message from "../components/Message";
+import dayjs from 'dayjs';
+
+
 
 import "../styles/pages/Chat.css";
 
-type ChatResponse = {
-    chatId?: number;
-    authUserId?: string;
-    recievingAuthUserId?: string;
-    text: string;
-    date: Date;
-};
-
 function Chat() {
-    const { newMessage, events } = Connector();
+    const { user } = useUser();
+    const { contacts, dispatch: setContacts } = useContacts();
+    const { chats, dispatch: setChats } = useChats();
+    const [currentContact, setCurrentContact] = useState<UserState | null>(
+        null
+    );
+    const { newMessage, events, JoinGroup } = Connector();
     const [message, setMessage] = useState("");
+    
 
-    const { loading, error, fetchData, response }: FetchResults = useFetch<
-        ChatResponse[]
-    >({
-        url: "CHAT",
+    const {
+        fetchData: fetchContacts,
+        response: contactsResponse,
+        setResponse: setContactResponse
+    }: FetchResults = useFetch<UserState[]>({
+        url: "CONTACTS",
         method: "GET",
-        query: "?userId=EX100",
     });
 
-    useEffect(() => {
+    const { loading, error, fetchData, response, setResponse: setChatResponse }: FetchResults =
+        useFetch<ChatState[]>({
+            url: "CHAT",
+            method: "GET",
+            query: "?receiverId=" + user.authUserId + "&senderId=" + currentContact?.authUserId,
+        });
+
+    const handleContactClick = (contact: UserState) => () => {
+        setCurrentContact(contact);
+        JoinGroup(generateGroupName(user.authUserId, contact.authUserId));
+        console.log("This is contact: " + contact.firstName);
         fetchData();
+
+        //console.log(user.authUserId + "has joined Group: " + generateGroupName(user.authUserId, contact.authUserId));
+    };
+
+    useEffect(() => {
+        events((message) => {
+            let chat : ChatState = JSON.parse(message);
+            setChats({
+                type: "addChat", payload: chat
+            })
+        });
+    },[]);
+
+    useEffect(() => {
+        fetchContacts();
+        //JoinGroup(user.authUserId);
     }, []);
 
     useEffect(() => {
         if (response) {
             console.log("Response", response);
+            console.log(response);
+            setChats({ type: "setChats", payload: response });
         }
-    }, [response]);
+
+        return () => {
+            setChatResponse(null);
+        };
+    }, [response, setChats, setChatResponse]);
+
+    useEffect(() => {
+        if (contactsResponse) {
+            setContacts({ type: "setContacts", payload: contactsResponse });
+        }
+
+        return () => {
+            setContactResponse(null);
+        };
+
+    }, [contactsResponse, setContacts, setContactResponse]);
+
+    function generateGroupName(firstUser: string, secondUser:  string) {
+        let sortedStrings: string[] = [firstUser, secondUser].sort();
+        let newString: string = sortedStrings.join(" ");
+
+        return (newString);
+    }
 
     function formSubmit(e: any) {
         e.preventDefault();
-        var newChat = { text: message, date: new Date().toLocaleTimeString() };
+
+        if (!currentContact) {
+            return;
+        }
+
+        var newChat: ChatState = {
+            text: message,
+            date: new Date(),
+            authUserId: user.authUserId,
+            recievingAuthUserId: currentContact?.authUserId,
+        };
+
+        newMessage(JSON.stringify(newChat), generateGroupName(user.authUserId, currentContact.authUserId));
+
         console.log("Form submitted", message);
-        response.push(newChat);
 
         setMessage("");
     }
@@ -53,49 +119,49 @@ function Chat() {
                 <aside className="chat__sidebar">
                     <header className="chat__header">
                         <h1>Contacts</h1>
+                        
                     </header>
-
                     <main className="chats__aside-contacts">
-                        <Contact
-                            lastMessage="Some message"
-                            picture=""
-                            name="John Doe"
-                        />
-                        <Contact
-                            lastMessage="Some message"
-                            picture=""
-                            name="Mpho Doe"
-                        />
-                        <Contact
-                            lastMessage="Some message"
-                            picture=""
-                            name="Leon Doe"
-                        />
+                        {contacts.length &&
+                            contacts.map((contact: UserState) => (
+                                <Contact
+                                    key={contact.userId}
+                                    picture={contact.avatarUrl}
+                                    name={`${contact.firstName} ${contact.lastName}`}
+                                    onClick={handleContactClick(contact)}
+                                />
+                            ))}
                     </main>
                 </aside>
-
                 <main className="chat__main">
                     <header className="chat__header">
                         <h1>Chat</h1>
                     </header>
 
-                    {(() => {
-                        if (response) {
-                            return (
-                                <main className="chat__messages">
-                                    {response.map((chat: ChatResponse) => (
-                                        <Message
-                                            isMine={false}
-                                            timestamp={chat.date.toString()}
-                                            message={chat.text}
-                                        />
-                                    ))}
-                                </main>
-                            );
-                        } else {
-                            return <h4> Messages Loading... </h4>;
-                        }
-                    })()}
+                    <main className="chat__messages">
+                        {(() => {
+                            if (chats.length) {
+                                return (
+                                    <>
+                                        <h1> {user.firstName + " chatting with " + currentContact?.firstName}</h1>
+                                        {chats.map((chat: ChatState) => (
+                                            <Message
+                                                isMine={
+                                                    chat.authUserId ===
+                                                    user.authUserId
+                                                }
+                                                key={chat.chatId}
+                                                timestamp={dayjs(chat.date).format('YYYY-MM-DD HH:mm:ss')}
+                                                message={chat.text}
+                                            />
+                                        ))}
+                                    </>
+                                );
+                            } else {
+                                return <h4> Select a user to message </h4>;
+                            }
+                        })()}
+                    </main>
 
                     <footer className="chat__footer">
                         <form onSubmit={formSubmit}>
@@ -113,7 +179,9 @@ function Chat() {
                                     fontWeight: "bold",
                                 }}
                                 type="submit"
-                                onClick={() => newMessage(message)}
+                              /*  onClick={() =>
+                                    newMessage(message, "group Name")
+                                }*/
                             >
                                 Send
                             </Button>
@@ -121,27 +189,6 @@ function Chat() {
                     </footer>
                 </main>
             </section>
-
-            {/* <span>
-                message from signalR:{" "}
-                <span style={{ color: "green" }}>{message}</span>{" "}
-            </span>
-
-            <form>
-                <label>
-                    Enter your name:
-                    <input
-                        type="text"
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                    />
-                </label>
-            </form>
-
-            <br />
-            <button onClick={() => newMessage("From SingalR: " + message)}>
-                send date{" "}
-            </button> */}
         </div>
     );
 }

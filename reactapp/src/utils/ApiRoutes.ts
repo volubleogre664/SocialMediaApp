@@ -14,6 +14,7 @@ const URLS: ApiRoutes = {
     LIKE: "/api/like",
     COMMENT: "/api/comment",
     MEDIA: "/api/media",
+    CONTACTS: "/api/user/get"
 };
 
 // Apply proxy to add baseUrl to all endpoints
