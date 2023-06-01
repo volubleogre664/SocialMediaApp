@@ -3,8 +3,8 @@ import { Button } from "@mui/material";
 import useForm from "../hooks/useForm";
 
 type UploadValues = {
-    avatar: string;
-    avatarFile: any;
+    media: string;
+    mediaFile: any;
 }
 
 interface MediaUploadProps {
@@ -14,8 +14,8 @@ interface MediaUploadProps {
 function MediaUpload({ mediaFileGetter }: MediaUploadProps) {
     const fileInput = useRef<HTMLInputElement | null>(null);
     const { onChange, values } = useForm<UploadValues>(formSubmit, {
-        avatar: "",
-        avatarFile: null,
+        media: "",
+        mediaFile: null,
     });
 
     function formSubmit() {
@@ -23,8 +23,8 @@ function MediaUpload({ mediaFileGetter }: MediaUploadProps) {
     }
 
     useEffect(() => {
-        if (values.avatarFile) {
-            mediaFileGetter(values.avatarFile);
+        if (values.mediaFile) {
+            mediaFileGetter(values.mediaFile);
         }
     }, [values, mediaFileGetter]);
 
@@ -32,7 +32,7 @@ function MediaUpload({ mediaFileGetter }: MediaUploadProps) {
         <div>
             <form>
                 <input ref={fileInput} style={{ display: "none" }} type="file"
-                    id="avatar" name="avatar"
+                    id="media" name="media"
                     accept="image/*, video/*" onChange={onChange} />
                 <Button variant="contained" onClick={(_) => {
                     fileInput.current?.click();
@@ -41,7 +41,6 @@ function MediaUpload({ mediaFileGetter }: MediaUploadProps) {
                 </Button>
             </form>
 
-            <img src={values.avatar} alt="" />
         </div>
     );
 }

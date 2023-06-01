@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import { Box, Button, TextField } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { Box, Button, Card, CardActions, CardContent, IconButton, TextField } from "@mui/material";
+import ImageIcon from '@mui/icons-material/Image';
 import useForm from "../hooks/useForm";
 import useFetch from "../hooks/useFetch";
 import { usePosts, useUser } from "../hooks/stateHooks";
@@ -7,6 +8,7 @@ import { usePosts, useUser } from "../hooks/stateHooks";
 import { FetchResults } from "../utils/Types";
 import MediaUpload from "./MediaUpload";
 import API_ENDPOINTS from "../utils/ApiRoutes";
+import MediaPreview from "./MediaPreview";
 
 type FormValues = {
     postId: number;
@@ -15,6 +17,11 @@ type FormValues = {
     mediaUrl: string;
     dateTimePosted: string;
 };
+
+type MediaValues = {
+    media: string;
+    mediaFile: File | null;
+}
 
 type RegisterResponse = {
     token: string;
@@ -32,7 +39,13 @@ function PostForm() {
         mediaUrl: "",
         dateTimePosted: new Date().toISOString(),
     });
+
+    const { onChange: mediaOnChange, values: mediaValues, updateValues: updateMediaValue } = useForm<MediaValues>(() => { }, {
+        media: "",
+        mediaFile: null,
+    })
     const [mediaFile, setMediaFile] = useState<File | null>(null);
+    const mediaInput = useRef<HTMLInputElement | null>(null);
 
     const { loading, error, fetchData, response }: FetchResults =
         useFetch<RegisterResponse>({
@@ -89,33 +102,42 @@ function PostForm() {
 
     return (
         <div>
-            <form onSubmit={onSubmit}>
-                <Box>
-                    <TextField
-                        multiline
-                        rows={4}
-                        placeholder="What's happening?"
-                        value={values.text}
-                        onChange={onChange}
-                        variant="outlined"
-                        fullWidth
-                        name="text"
-                        id="text"
-                    />
-                </Box>
+            <Card variant="outlined" sx={{ minWidth: 275, maxWidth: 600 }}>
+                <CardContent>
+                    <Box>
+                        <TextField
+                            multiline
+                            rows={4}
+                            placeholder="What's happening?"
+                            value={values.text}
+                            onChange={onChange}
+                            variant="outlined"
+                            fullWidth
+                            name="text"
+                            id="text"
+                        />
+                    </Box>
 
-                <input
-                    value={values.mediaUrl}
-                    onChange={onChange}
-                    type="hidden"
-                    name="mediaUrl"
-                    id="mediaUrl"
-                />
+                    {mediaValues.mediaFile != null && (<MediaPreview file={mediaValues.mediaFile} onPreviewClose={() => updateMediaValue("mediaFile", null)} />)}
+                </CardContent>
+                <CardActions sx={{ justifyContent: 'space-between' }}>
 
-                <Button variant="contained" type="submit">
-                    Tweet
-                </Button>
-            </form>
+                    <input ref={mediaInput} style={{ display: "none" }} type="file"
+                        id="media" name="media"
+                        accept="image/*, video/*" onChange={mediaOnChange} />
+                    <IconButton onClick={(_) => {
+                        mediaInput.current?.click();
+                    }}>
+                        <ImageIcon color="primary" />
+                    </IconButton>
+
+                    <Button variant="contained" onClick={(e: any) => formSubmit()}>
+                        Create Post
+                    </Button>
+                </CardActions>
+            </Card>
+            <div>
+            </div>
             <MediaUpload mediaFileGetter={(file: File) => setMediaFile(file)} />
         </div>
     );
