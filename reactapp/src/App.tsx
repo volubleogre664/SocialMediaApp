@@ -7,6 +7,8 @@ import Chat from "./pages/Chat";
 import UserProfile from "./pages/UserProfile";
 import FinishRegister from "./pages/FinishRegister";
 
+
+
 import Header from "./components/Header";
 
 import "./styles/App.css";
@@ -48,6 +50,7 @@ function WrapperComponent({ Component }: { Component: Function }) {
 }
 
 function App() {
+
     return (
         <div className="app">
             <RouterProvider router={router} />

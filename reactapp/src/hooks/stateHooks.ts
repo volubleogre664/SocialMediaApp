@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { TypedUseSelectorHook } from "react-redux";
 import type { RootState, AppDispatch } from "../context/store";
 import { setUser } from "../context/slices/userSlice";
+import { setContacts } from "../context/slices/contactsSlice";
 import { UserState } from "../utils/Types";
 import {
     setPosts,
@@ -9,6 +10,7 @@ import {
     addPost,
     addLike,
 } from "../context/slices/postSlice";
+import { setChats, addChat } from "../context/slices/chatsSlice";
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 const useAppDispatch: () => AppDispatch = useDispatch;
@@ -67,4 +69,53 @@ const usePosts = () => {
     return { posts, dispatch };
 };
 
-export { useUser, usePosts };
+const useContacts = () => {
+    const contacts = useAppSelector(
+        (state) => state.contacts.contacts as UserState[]
+    );
+    const dispatchContacts = useAppDispatch();
+
+    type ContactsDispatch = {
+        type: string;
+        payload: any;
+    };
+
+    const dispatch = ({ type, payload }: ContactsDispatch) => {
+        switch (type) {
+            case "setContacts":
+                dispatchContacts(setContacts(payload));
+                break;
+            default:
+                break;
+        }
+    };
+
+    return { contacts, dispatch };
+};
+
+const useChats = () => {
+    const chats = useAppSelector((state) => state.chats.chats);
+    const dispatchChats = useAppDispatch();
+
+    type ChatsDispatch = {
+        type: string;
+        payload: any;
+    };
+
+    const dispatch = ({ type, payload }: ChatsDispatch) => {
+        switch (type) {
+            case "setChats":
+                dispatchChats(setChats(payload));
+                break;
+            case "addChat":
+                dispatchChats(addChat(payload));
+                break;
+            default:
+                break;
+        }
+    };
+
+    return { chats, dispatch };
+};
+
+export { useUser, useContacts, useChats, usePosts };

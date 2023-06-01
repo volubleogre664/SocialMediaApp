@@ -53,5 +53,13 @@
 
             return this.Ok(newUser);
         }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult Get()
+        {
+            var users = this.userService.GetAll();
+            return this.Ok(users);
+        }
     }
 }

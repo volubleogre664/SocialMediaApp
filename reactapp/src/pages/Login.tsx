@@ -7,6 +7,8 @@ import useFetch from "../hooks/useFetch";
 import { useUser } from "../hooks/stateHooks";
 import { FetchResults, UserState } from "../utils/Types";
 
+import Connector from "../signalr-connection";
+
 import "../styles/pages/Login.css";
 type FormValues = {
     email: string;
@@ -47,7 +49,7 @@ function Login() {
                 type: "setUser",
                 payload: response.user,
             });
-
+            const { newMessage, events, JoinGroup } = Connector();
             navigate("/user-profile");
         }
     }, [response, dispatch, navigate]);

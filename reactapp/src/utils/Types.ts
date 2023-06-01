@@ -10,6 +10,7 @@ type FetchResults = {
     error: string | null;
     loading: boolean;
     fetchData: () => void;
+    setResponse?: any;
 };
 
 type Comment = {
@@ -52,6 +53,15 @@ type UserState = {
     avatarUrl: string;
 };
 
+
+type ChatState = {
+    chatId?: number;
+    authUserId: string;
+    recievingAuthUserId: string;
+    text: string;
+    date: Date;
+};
+
 export type {
     FetchData,
     FetchResults,
@@ -60,4 +70,6 @@ export type {
     Comment,
     Like,
     PostType,
+    ChatState
 };
+

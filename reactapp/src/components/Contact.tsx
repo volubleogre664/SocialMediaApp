@@ -5,7 +5,7 @@ import "../styles/components/Contact.css";
 type Props = {
     name: string;
     picture: string;
-    lastMessage: string;
+    onClick: () => void;
 };
 
 // Generate a color from a string
@@ -40,11 +40,11 @@ function stringAvatar(name: string) {
     };
 }
 
-function Contact({ name, picture, lastMessage }: Props) {
+function Contact({ name, picture, onClick }: Props) {
     const sizes: any = {};
 
     return (
-        <div className="contact">
+        <div className="contact" onClick={onClick}>
             <div className="contact__main">
                 <div>
                     {picture ? (
