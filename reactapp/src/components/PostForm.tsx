@@ -124,10 +124,10 @@ function PostForm() {
                     <input ref={mediaInput} style={{ display: "none" }} type="file"
                         id="media" name="media"
                         accept="image/*, video/*" onChange={mediaOnChange} />
-                    <IconButton onClick={(_) => {
+                    <IconButton disabled={mediaValues.mediaFile != null} onClick={(_) => {
                         mediaInput.current?.click();
                     }}>
-                        <ImageIcon color="primary" />
+                        <ImageIcon color={mediaValues.mediaFile ? "disabled" : "primary"} />
                     </IconButton>
 
                     <Button variant="contained" onClick={(e: any) => formSubmit()}>
