@@ -6,7 +6,6 @@ import useFetch from "../hooks/useFetch";
 import { usePosts, useUser } from "../hooks/stateHooks";
 
 import { FetchResults } from "../utils/Types";
-import MediaUpload from "./MediaUpload";
 import API_ENDPOINTS from "../utils/ApiRoutes";
 import MediaPreview from "./MediaPreview";
 
@@ -44,10 +43,9 @@ function PostForm() {
         media: "",
         mediaFile: null,
     })
-    const [mediaFile, setMediaFile] = useState<File | null>(null);
     const mediaInput = useRef<HTMLInputElement | null>(null);
 
-    const { loading, error, fetchData, response }: FetchResults =
+    const { loading, error, fetchData, response, setResponse }: FetchResults =
         useFetch<RegisterResponse>({
             url: "POSTS",
             query: "",
@@ -60,13 +58,13 @@ function PostForm() {
         fetchData();
     }
 
-    async function uploadMediaFile() {
-        if (!mediaFile) {
-            return;
+    async function uploadMediaFile(): Promise<boolean> {
+        if (!mediaValues.mediaFile) {
+            return false;
         }
 
         const formData = new FormData();
-        formData.append("file", mediaFile);
+        formData.append("file", mediaValues.mediaFile);
 
         const url = API_ENDPOINTS["MEDIA"];
         try {
@@ -74,14 +72,11 @@ function PostForm() {
                 method: "POST",
                 body: formData,
             });
-            console.log(mediaFile.name)
-            if (res.ok)
-                updateValues("mediaUrl", mediaFile.name);
+
+            return res.ok;
         } catch (error) {
-
+            return false;
         }
-
-        console.log(values);
     }
 
     useEffect(() => {
@@ -95,10 +90,14 @@ function PostForm() {
                 }
             });
         }
-        if (mediaFile) {
-            updateValues("mediaUrl", mediaFile.name);
-        }
-    }, [response, mediaFile]);
+        return () => {
+            setResponse(null);
+        };
+    }, [response]);
+
+    useEffect(() => {
+        updateValues("mediaUrl", mediaValues.mediaFile ? mediaValues.mediaFile.name : "");
+    }, [mediaValues.mediaFile])
 
     return (
         <div>
@@ -138,7 +137,6 @@ function PostForm() {
             </Card>
             <div>
             </div>
-            <MediaUpload mediaFileGetter={(file: File) => setMediaFile(file)} />
         </div>
     );
 }
