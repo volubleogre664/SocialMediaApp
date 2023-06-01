@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
-import { Avatar, Button } from "@mui/material";
-import { Person } from "@mui/icons-material";
+import { Avatar, Box, Button, IconButton, TextField } from "@mui/material";
+import { Person, PublishRounded } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
 import Loader from "../components/Loader";
@@ -11,8 +11,6 @@ import useFetch from "../hooks/useFetch";
 import { useUser } from "../hooks/stateHooks";
 
 import { UserState } from "../utils/Types";
-
-// import placeholderImg from "../assets/placeholder-image-person-jpg.jpg";
 
 import "../styles/pages/FinishRegister.css";
 
@@ -50,6 +48,12 @@ function FinishRegister() {
         fetchData();
     }
 
+    function cancelRegister() {
+        localStorage.removeItem("auth");
+        localStorage.removeItem("token");
+        navigate("/login");
+    }
+
     useEffect(() => {
         if (response) {
             if (response.firstName.length > 0) {
@@ -59,54 +63,19 @@ function FinishRegister() {
                 });
 
                 navigate("/user-profile");
+                localStorage.removeItem("auth");
             }
         }
     }, [response, dispatch, navigate]);
 
     return (
-        <div>
+        <div className="account">
             {loading && <Loader />}
 
-            <h1>Complete Setting up your account</h1>
+            <h1>Account Setup</h1>
 
-            <form onSubmit={onSubmit}>
-                <div>
-                    <label htmlFor="username">Username</label>
-                    <input
-                        type="text"
-                        name="username"
-                        id="username"
-                        onChange={onChange}
-                        value={values.username}
-                        placeholder="Username"
-                    />
-                </div>
-
-                <div>
-                    <label htmlFor="firstName">First name</label>
-                    <input
-                        type="text"
-                        name="firstName"
-                        id="firstName"
-                        onChange={onChange}
-                        value={values.firstName}
-                        placeholder="First name"
-                    />
-                </div>
-
-                <div>
-                    <label htmlFor="lastName">Last name</label>
-                    <input
-                        type="text"
-                        name="lastName"
-                        id="lastName"
-                        onChange={onChange}
-                        value={values.lastName}
-                        placeholder="Last name"
-                    />
-                </div>
-
-                <div>
+            <Box className="account__form" component="form" onSubmit={onSubmit}>
+                <div className="avatar__label">
                     <label htmlFor="avatarUrl">Profile Picture</label>
                     <input
                         style={{ display: "none" }}
@@ -120,7 +89,7 @@ function FinishRegister() {
 
                     <div>
                         {!values.avatarUrl ? (
-                            <Avatar sx={{ width: 100, height: 100 }}>
+                            <Avatar sx={{ width: 120, height: 120 }}>
                                 <Person />
                             </Avatar>
                         ) : (
@@ -131,19 +100,57 @@ function FinishRegister() {
                         )}
                     </div>
 
-                    <Button
+                    <IconButton
+                        className="avatar__uploadBtn"
                         onClick={() => fileInputRef?.current?.click()}
-                        variant="contained"
                         component="span"
                     >
-                        Upload
-                    </Button>
+                        <PublishRounded />
+                    </IconButton>
                 </div>
 
-                <Button variant="contained" type="submit">
-                    Submit
-                </Button>
-            </form>
+                <div>
+                    <TextField
+                        type="text"
+                        name="username"
+                        id="username"
+                        onChange={onChange}
+                        value={values.username}
+                        label="Username"
+                    />
+                </div>
+
+                <div>
+                    <TextField
+                        type="text"
+                        name="firstName"
+                        id="firstName"
+                        onChange={onChange}
+                        value={values.firstName}
+                        label="First Name"
+                    />
+                </div>
+
+                <div>
+                    <TextField
+                        type="text"
+                        name="lastName"
+                        id="lastName"
+                        onChange={onChange}
+                        value={values.lastName}
+                        label="Last Name"
+                    />
+                </div>
+
+                <footer className="account__footer">
+                    <Button variant="contained" type="submit">
+                        Submit
+                    </Button>
+                    <Button variant="outlined" onClick={cancelRegister}>
+                        Cancel
+                    </Button>
+                </footer>
+            </Box>
         </div>
     );
 }

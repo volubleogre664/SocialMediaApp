@@ -3,15 +3,12 @@ import { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { UserState } from "../../utils/Types";
 
-const initialState = {
-    user: {
-        authUserId: localStorage.getItem("auth") || "",
-        userId: 0,
-        username: "",
-        firstName: "",
-        lastName: "",
-        avatarUrl: "",
-    } as UserState | null,
+type InitialState = {
+    user: UserState | null;
+};
+
+const initialState: InitialState = {
+    user: null,
 };
 
 export const userSlice = createSlice({

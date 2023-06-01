@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { Button, FormControl } from "@mui/material";
+import { Button, TextField, Box, FormControl } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -12,6 +12,7 @@ import useFetch from "../hooks/useFetch";
 import { FetchResults } from "../utils/Types";
 
 import "../styles/pages/Register.css";
+import PasswordInput from "../components/PasswordInput";
 
 type FormValues = {
     email: string;
@@ -38,7 +39,7 @@ function Register() {
             url: "REGISTER",
             query: "",
             method: "POST",
-            body: values
+            body: values,
         });
 
     function formSubmit() {
@@ -54,56 +55,64 @@ function Register() {
         }
     }, [response, navigate]);
 
+    useEffect(() => {
+        const authId = localStorage.getItem("auth");
+        if (authId) {
+            navigate("/finish-register");
+        }
+    });
+
     return (
         <div className="register">
             {loading && <Loader />}
 
-            <h1>Register User</h1>
+            <main className="register__body">
+                <h1>Register</h1>
 
-            <form onSubmit={onSubmit}>
-                <FormControl>
-                    <label htmlFor="username">Email</label>
-                    <input
-                        type="text"
-                        name="email"
-                        id="email"
-                        value={values.email}
-                        onChange={onChange}
-                    />
-                </FormControl>
+                <Box
+                    className="register__bodyForm"
+                    component="form"
+                    onSubmit={onSubmit}
+                >
+                    <FormControl>
+                        <TextField
+                            label="Email"
+                            type="text"
+                            name="email"
+                            id="email"
+                            value={values.email}
+                            onChange={onChange}
+                        />
+                    </FormControl>
 
-                <FormControl>
-                    <label htmlFor="password">Password</label>
-                    <input
-                        value={values.password}
-                        onChange={onChange}
-                        type="password"
-                        name="password"
-                        id="password"
-                    />
-                </FormControl>
+                    <FormControl>
+                        <PasswordInput
+                            label="Password"
+                            name="password"
+                            value={values.password}
+                            onChange={onChange}
+                        />
+                    </FormControl>
 
-                <FormControl>
-                    <label htmlFor="confirmPassword">Confirm Password</label>
-                    <input
-                        type="password"
-                        name="confirmPassword"
-                        id="confirmPassword"
-                        value={values.confirmPassword}
-                        onChange={onChange}
-                    />
-                </FormControl>
+                    <FormControl>
+                        <PasswordInput
+                            label="Confirm Password"
+                            name="confirmPassword"
+                            value={values.confirmPassword}
+                            onChange={onChange}
+                        />
+                    </FormControl>
 
-                <Button variant="contained" type="submit">
-                    Register
-                </Button>
-
-                <footer>
-                    <small>
-                        Already have an account? <Link to="/login">Login</Link>
-                    </small>
-                </footer>
-            </form>
+                    <Button variant="contained" type="submit">
+                        Register
+                    </Button>
+                </Box>
+            </main>
+            <footer className="register__footer">
+                <small>
+                    Already have an account? <Link to="/login">Login</Link>
+                </small>
+            </footer>
         </div>
     );
 }

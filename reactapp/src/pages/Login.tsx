@@ -1,15 +1,18 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { Box, Button, TextField } from "@mui/material";
 import Loader from "../components/Loader";
 import useForm from "../hooks/useForm";
 import useFetch from "../hooks/useFetch";
 import { useUser } from "../hooks/stateHooks";
 import { FetchResults, UserState } from "../utils/Types";
+import PasswordInput from "../components/PasswordInput";
 
 import Connector from "../signalr-connection";
 
 import "../styles/pages/Login.css";
+
 type FormValues = {
     email: string;
     password: string;
@@ -43,7 +46,6 @@ function Login() {
     useEffect(() => {
         if (response) {
             localStorage.setItem("token", response.token);
-            localStorage.setItem("auth", response.user.authUserId);
 
             dispatch({
                 type: "setUser",
@@ -54,42 +56,54 @@ function Login() {
         }
     }, [response, dispatch, navigate]);
 
+    useEffect(() => {
+        const authId = localStorage.getItem("auth");
+        if (authId) {
+            navigate("/finish-register");
+        }
+    });
+
     return (
         <div className="login">
             <main className="login__body">
                 {loading && <Loader />}
                 <h1>Login</h1>
 
-                <form onSubmit={onSubmit}>
+                <Box
+                    className="login__bodyForm"
+                    component="form"
+                    onSubmit={onSubmit}
+                >
                     <div className="login__form-control">
-                        <label htmlFor="email">Email</label>
-                        <input
+                        <TextField
+                            name="email"
+                            label="Email"
+                            type="text"
+                            id="text"
                             onChange={onChange}
                             value={values.email}
-                            type="text"
-                            name="email"
-                            id="email"
                         />
                     </div>
 
                     <div className="login__form-control">
-                        <label htmlFor="password">Password</label>
-                        <input
+                        <PasswordInput
+                            name="password"
+                            label="Password"
                             onChange={onChange}
                             value={values.password}
-                            type="password"
-                            name="password"
-                            id="password"
                         />
                     </div>
 
-                    <button type="submit">Login</button>
-                </form>
+                    <Button variant="contained" type="submit">
+                        Login
+                    </Button>
+                </Box>
             </main>
 
             <footer className="login__footer">
                 <small>
-                    Already have an account? <Link to="/login">Login</Link>
+                    Already have an account?{" "}
+                    <Link to="/register">Register</Link>
                 </small>
             </footer>
         </div>

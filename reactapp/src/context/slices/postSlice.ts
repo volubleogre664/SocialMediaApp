@@ -36,7 +36,19 @@ export const postSlice = createSlice({
                 const post = state.posts.find(
                     (post) => post.post.postId === postId
                 );
-                if (post) post.likes.push(action.payload);
+                if (!post) return;
+
+                const like = post.likes.find(
+                    (like) => like.userId === action.payload?.userId
+                );
+
+                if (like) {
+                    post.likes = post.likes.filter(
+                        (like) => like.userId !== action.payload?.userId
+                    );
+                } else {
+                    post.likes.push(action.payload);
+                }
             }
         },
     },

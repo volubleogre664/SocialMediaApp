@@ -48,7 +48,7 @@ function Post({ post, postOwner, comments, likes }: PostProps) {
         body: {
             likeId: 0,
             postId: post.postId,
-            userId: user.userId,
+            userId: user?.userId,
         },
     });
 
@@ -62,20 +62,16 @@ function Post({ post, postOwner, comments, likes }: PostProps) {
         body: {
             commentId: 0,
             postId: post.postId,
-            userId: user.userId,
+            userId: user?.userId,
             text: comment,
             dateTimePosted: new Date(),
         },
     });
 
-    const {
-        response: mediaResponse,
-        fetchData: getMedia,
-
-    } = useFetch<File>({
+    const { response: mediaResponse, fetchData: getMedia } = useFetch<File>({
         url: "MEDIA",
         method: "GET",
-        query: "/" + post.mediaUrl
+        query: "/" + post.mediaUrl,
     });
 
     const openComments = () => {
@@ -95,7 +91,7 @@ function Post({ post, postOwner, comments, likes }: PostProps) {
     };
 
     const getColor = function () {
-        if (likes.find((like) => like.userId === user.userId)) {
+        if (likes.find((like) => like.userId === user?.userId)) {
             return "red";
         } else {
             return "inherit";
@@ -127,18 +123,18 @@ function Post({ post, postOwner, comments, likes }: PostProps) {
         if (post.mediaUrl) {
             getMedia();
         }
-    }, [post.mediaUrl])
+    }, [post.mediaUrl]);
 
     useEffect(() => {
         if (mediaResponse) {
             console.log(mediaResponse);
             setMediaFile(mediaResponse);
         }
-    }, [mediaResponse])
+    }, [mediaResponse]);
 
     return (
-        <div className="post">
-            <Card sx={{ maxWidth: 600, minWidth: 350 }}>
+        <div id={`post-${post.postId}`} className="post">
+            <Card sx={{ width: 600 }}>
                 <CardHeader
                     avatar={
                         <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -167,8 +163,9 @@ function Post({ post, postOwner, comments, likes }: PostProps) {
                             src={URL.createObjectURL(mediaFile)}
                         />
                     )
-                ) :
-                    ""}
+                ) : (
+                    ""
+                )}
                 <CardContent>
                     <Typography variant="body2" color="text.secondary">
                         {post.text}
@@ -243,7 +240,7 @@ function Post({ post, postOwner, comments, likes }: PostProps) {
                             noValidate
                             autoComplete="off"
                         >
-                            {(user.userId && (
+                            {(user?.userId && (
                                 <>
                                     <TextField
                                         style={{
@@ -253,6 +250,7 @@ function Post({ post, postOwner, comments, likes }: PostProps) {
                                         onChange={(e) =>
                                             setComment(e.target.value)
                                         }
+                                        value={comment}
                                         className="post__commentInput"
                                         id="outlined-textarea"
                                         label=""
@@ -270,10 +268,10 @@ function Post({ post, postOwner, comments, likes }: PostProps) {
                                     </Button>
                                 </>
                             )) || (
-                                    <p style={{ textAlign: "center" }}>
-                                        Login to comment
-                                    </p>
-                                )}
+                                <p style={{ textAlign: "center" }}>
+                                    Login to comment
+                                </p>
+                            )}
                         </Box>
                     </CardContent>
                 </Collapse>

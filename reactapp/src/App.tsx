@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Home from "./pages/Home";
@@ -6,8 +7,6 @@ import Login from "./pages/Login";
 import Chat from "./pages/Chat";
 import UserProfile from "./pages/UserProfile";
 import FinishRegister from "./pages/FinishRegister";
-
-
 
 import Header from "./components/Header";
 
@@ -44,13 +43,12 @@ function WrapperComponent({ Component }: { Component: Function }) {
     return (
         <>
             <Header />
-            <Component />            
+            <Component />
         </>
     );
 }
 
 function App() {
-
     return (
         <div className="app">
             <RouterProvider router={router} />

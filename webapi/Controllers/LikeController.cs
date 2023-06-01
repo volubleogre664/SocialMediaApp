@@ -35,7 +35,20 @@
                 return this.BadRequest(this.ModelState);
             }
 
-            this.likeService.Add(model);
+            int? likeId = this.likeService
+                .GetAll()
+                .FirstOrDefault(_ => _.UserId == model.UserId && _.PostId == model.PostId)
+                ?.LikeId;
+
+            if (likeId.HasValue && likeId.Value > 0)
+            {
+                this.likeService.Delete(likeId.Value);
+                model.LikeId = likeId.Value;
+            }
+            else
+            {
+                this.likeService.Add(model);
+            }
 
             return this.Ok(model);
         }
