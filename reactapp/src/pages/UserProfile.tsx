@@ -48,8 +48,6 @@ function UserProfile() {
             </main>
 
             <div className="profile__actionBtns">
-                <Button variant="contained">Change Details</Button>
-                <Button variant="contained">Change Password</Button>
                 <Button variant="contained">Change Avatar</Button>
             </div>
         </div>

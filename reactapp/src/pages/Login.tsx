@@ -57,6 +57,12 @@ function Login() {
     }, [response, dispatch, navigate]);
 
     useEffect(() => {
+        if (error) {
+            console.log(error);
+        }
+    }, [error]);
+
+    useEffect(() => {
         const authId = localStorage.getItem("auth");
         if (authId) {
             navigate("/finish-register");
@@ -74,12 +80,19 @@ function Login() {
                     component="form"
                     onSubmit={onSubmit}
                 >
+                    {(error && (
+                        <p style={{ color: "red" }} className="error">
+                            {error?.message}
+                        </p>
+                    )) || <></>}
+
                     <div className="login__form-control">
                         <TextField
                             name="email"
                             label="Email"
-                            type="text"
+                            type="email"
                             id="text"
+                            required
                             onChange={onChange}
                             value={values.email}
                         />
@@ -87,6 +100,7 @@ function Login() {
 
                     <div className="login__form-control">
                         <PasswordInput
+                            id="password"
                             name="password"
                             label="Password"
                             onChange={onChange}
@@ -102,8 +116,7 @@ function Login() {
 
             <footer className="login__footer">
                 <small>
-                    Already have an account?{" "}
-                    <Link to="/register">Register</Link>
+                    Don't have an account? <Link to="/register">Register</Link>
                 </small>
             </footer>
         </div>

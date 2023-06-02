@@ -123,7 +123,7 @@ function PostForm() {
 
     return (
         <div>
-            <Card variant="outlined" sx={{ minWidth: 275, maxWidth: 600 }}>
+            <Card variant="outlined" sx={{ width: 600 }}>
                 <CardContent>
                     <Box>
                         <TextField

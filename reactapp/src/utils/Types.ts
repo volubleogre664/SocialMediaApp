@@ -7,7 +7,7 @@ type FetchData = {
 
 type FetchResults = {
     response: any;
-    error: string | null;
+    error: { message: string } | null;
     loading: boolean;
     fetchData: () => void;
     setResponse?: any;
@@ -53,7 +53,6 @@ type UserState = {
     avatarUrl: string;
 };
 
-
 type ChatState = {
     chatId?: number;
     authUserId: string;
@@ -70,6 +69,5 @@ export type {
     Comment,
     Like,
     PostType,
-    ChatState
+    ChatState,
 };
-

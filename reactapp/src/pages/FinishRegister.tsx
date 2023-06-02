@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Avatar, Box, Button, IconButton, TextField } from "@mui/material";
 import { Person, PublishRounded } from "@mui/icons-material";
@@ -22,10 +22,18 @@ type RegisterValues = {
     avatarUrl?: string;
 };
 
+type RegisterError = {
+    firstName?: string[];
+    lastName?: string[];
+    username?: string[];
+};
+
 function FinishRegister() {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
     const { dispatch } = useUser();
+    const [validationErrors, setValidationErrors] =
+        useState<RegisterError | null>(null);
     const { onChange, onSubmit, values } = useForm<RegisterValues>(
         registerUser,
         {
@@ -37,7 +45,9 @@ function FinishRegister() {
         }
     );
 
-    const { loading, error, response, fetchData } = useFetch<UserState>({
+    const { loading, error, response, fetchData } = useFetch<
+        UserState | RegisterError
+    >({
         url: "FINALIZE_REGISTER",
         query: "",
         method: "POST",
@@ -56,14 +66,16 @@ function FinishRegister() {
 
     useEffect(() => {
         if (response) {
-            if (response.firstName.length > 0) {
+            if (typeof response?.firstName === "string") {
                 dispatch({
                     type: "setUser",
-                    payload: response,
+                    payload: response as UserState,
                 });
 
                 navigate("/user-profile");
                 localStorage.removeItem("auth");
+            } else {
+                setValidationErrors(response as RegisterError);
             }
         }
     }, [response, dispatch, navigate]);
@@ -114,6 +126,7 @@ function FinishRegister() {
                         type="text"
                         name="username"
                         id="username"
+                        required
                         onChange={onChange}
                         value={values.username}
                         label="Username"
@@ -125,6 +138,7 @@ function FinishRegister() {
                         type="text"
                         name="firstName"
                         id="firstName"
+                        required
                         onChange={onChange}
                         value={values.firstName}
                         label="First Name"
@@ -137,6 +151,7 @@ function FinishRegister() {
                         name="lastName"
                         id="lastName"
                         onChange={onChange}
+                        required
                         value={values.lastName}
                         label="Last Name"
                     />

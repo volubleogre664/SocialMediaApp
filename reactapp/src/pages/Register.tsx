@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { Button, TextField, Box, FormControl } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -26,6 +26,7 @@ type RegisterResponse = {
 };
 
 function Register() {
+    const [isPasswordsEqual, setIsPasswordsEqual] = useState(true);
     const { onChange, onSubmit, values } = useForm<FormValues>(formSubmit, {
         email: "",
         password: "",
@@ -43,8 +44,19 @@ function Register() {
         });
 
     function formSubmit() {
+        if (!isPasswordsEqual) {
+            return;
+        }
         fetchData();
     }
+
+    useEffect(() => {
+        if (values.password !== values.confirmPassword) {
+            setIsPasswordsEqual(false);
+        } else {
+            setIsPasswordsEqual(true);
+        }
+    }, [values.password, values.confirmPassword]);
 
     useEffect(() => {
         if (response) {
@@ -62,6 +74,12 @@ function Register() {
         }
     });
 
+    useEffect(() => {
+        if (error) {
+            console.log(error);
+        }
+    }, [error]);
+
     return (
         <div className="register">
             {loading && <Loader />}
@@ -74,12 +92,22 @@ function Register() {
                     component="form"
                     onSubmit={onSubmit}
                 >
+                    {(error && (
+                        <p
+                            style={{ color: "red", width: "250px" }}
+                            className="error"
+                        >
+                            {error?.message}
+                        </p>
+                    )) || <></>}
+
                     <FormControl>
                         <TextField
                             label="Email"
-                            type="text"
+                            type="email"
                             name="email"
                             id="email"
+                            required
                             value={values.email}
                             onChange={onChange}
                         />
@@ -91,6 +119,7 @@ function Register() {
                             name="password"
                             value={values.password}
                             onChange={onChange}
+                            id="password"
                         />
                     </FormControl>
 
@@ -98,6 +127,8 @@ function Register() {
                         <PasswordInput
                             label="Confirm Password"
                             name="confirmPassword"
+                            id="confirmPassword"
+                            error={!isPasswordsEqual}
                             value={values.confirmPassword}
                             onChange={onChange}
                         />

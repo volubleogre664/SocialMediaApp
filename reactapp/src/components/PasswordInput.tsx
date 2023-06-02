@@ -13,6 +13,8 @@ type Props = {
     value: string;
     label: string;
     name: string;
+    id: string;
+    error?: boolean;
 };
 
 function PasswordInput(props: Props) {
@@ -26,11 +28,8 @@ function PasswordInput(props: Props) {
 
     return (
         <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-password">
-                {props.label}
-            </InputLabel>
+            <InputLabel htmlFor={props.id}>{props.label}</InputLabel>
             <OutlinedInput
-                id="outlined-adornment-password"
                 type={showPassword ? "text" : "password"}
                 endAdornment={
                     <InputAdornment position="end">
@@ -48,10 +47,13 @@ function PasswordInput(props: Props) {
                         </IconButton>
                     </InputAdornment>
                 }
+                required
+                error={props.error}
                 label={props.label}
                 name={props.name}
                 onChange={props.onChange}
                 value={props.value}
+                id={props.id}
             />
         </FormControl>
     );

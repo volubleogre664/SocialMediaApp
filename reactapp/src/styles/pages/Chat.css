@@ -83,3 +83,7 @@
     margin-right: 10px;
     background-color: transparent;
 }
+
+.chat__footer form input::placeholder {
+    color: #fff;
+}

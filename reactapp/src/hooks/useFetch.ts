@@ -8,7 +8,7 @@ function useFetch<T>(data: FetchData) {
     const url = API_ENDPOINTS[data.url] + query;
 
     const [response, setResponse] = useState<T | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<{ message: string } | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
     const fetchData = async () => {
@@ -32,9 +32,15 @@ function useFetch<T>(data: FetchData) {
                 content = await res.json();
             }
 
+            if (res.status === 400 && !content?.message) {
+                setResponse(content);
+            } else if (!res.ok) {
+                throw new Error(content.message);
+            }
+
             setResponse(content);
         } catch (error: any) {
-            setError(error);
+            setError({ message: error.message });
         } finally {
             setLoading(false);
         }
