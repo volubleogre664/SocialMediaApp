@@ -89,6 +89,10 @@ const SearchComponent = () => {
         return userProfile || null;
     };
 
+    const handleResultClick = () => {
+        setKeyword(""); // Clear the search box
+    };
+
     return (
         <Box
             sx={{
@@ -96,6 +100,8 @@ const SearchComponent = () => {
                 maxWidth: 300,
                 bgcolor: "background.paper",
                 position: "fixed",
+                top: 50,
+                left: 10,
                 zIndex: 9999,
             }}
         >
@@ -118,7 +124,10 @@ const SearchComponent = () => {
                                 <ListItem
                                     key={index}
                                     className="search__result"
-                                    onClick={() => viewPost(result.postId)}
+                                    onClick={() => {
+                                        viewPost(result.postId);
+                                        handleResultClick();
+                                    }}
                                     sx={{
                                         display: "flex",
                                         alignItems: "center",
@@ -141,7 +150,7 @@ const SearchComponent = () => {
                                                 ? userProfile.firstName +
                                                   " " +
                                                   userProfile.lastName
-                                                : "Unknown User"
+                                                : ""
                                         }
                                         secondary={
                                             <React.Fragment>
@@ -162,15 +171,6 @@ const SearchComponent = () => {
                     </List>
                 </Paper>
             )}
-            {/*<ul>*/}
-            {/*    {results.map((result: { text: string }, index) => (*/}
-            {/*        <li key={index}>*/}
-            {/*            <a href={`https://example.com/${result.postId}`} target="_blank" rel="noopener noreferrer">*/}
-            {/*                {result.text}*/}
-            {/*            </a>*/}
-            {/*        </li>*/}
-            {/*    ))}*/}
-            {/*</ul>*/}
         </Box>
     );
 };
