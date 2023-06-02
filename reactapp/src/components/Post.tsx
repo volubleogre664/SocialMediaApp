@@ -191,7 +191,7 @@ function Post({ post, postOwner, comments, likes }: PostProps) {
                         onClick={openComments}
                         size="small"
                     >
-                        <ForumIcon />
+                        <ForumIcon style={{ color: "#1976d2" }} />
                         <span>{comments.length || ""}</span>
                     </IconButton>
                 </CardActions>
@@ -268,10 +268,10 @@ function Post({ post, postOwner, comments, likes }: PostProps) {
                                     </Button>
                                 </>
                             )) || (
-                                <p style={{ textAlign: "center" }}>
-                                    Login to comment
-                                </p>
-                            )}
+                                    <p style={{ textAlign: "center" }}>
+                                        Login to comment
+                                    </p>
+                                )}
                         </Box>
                     </CardContent>
                 </Collapse>

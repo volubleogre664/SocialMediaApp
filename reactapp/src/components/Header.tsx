@@ -8,10 +8,9 @@ function Header() {
 
     return (
         <div className="header">
-            <div className="header__logo">Social Media</div>
+            <div className="header__logo"><NavLink to="/" text="Social Media" /></div>
 
             <nav className="header__nav">
-                <NavLink to="/" text="Home" />
 
                 {user ? (
                     <>

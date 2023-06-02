@@ -21,10 +21,10 @@ function Chat() {
 
     const { fetchData: fetchContacts, response: contactsResponse, setResponse: setContactResponse }:
         FetchResults = useFetch<UserState[]>({
-        url: "CONTACTS",
-        method: "GET",
-        query: "?userId=" + user.authUserId
-    });
+            url: "CONTACTS",
+            method: "GET",
+            query: "?userId=" + user.authUserId
+        });
 
     const { loading, error, fetchData, response, setResponse: setChatResponse }: FetchResults =
         useFetch<ChatState[]>({
@@ -38,7 +38,7 @@ function Chat() {
     if (response != null) {
         console.log("Value of response at start: " + response);
     }
-    else { 
+    else {
         console.log("Value of response is null");
     }
 
@@ -56,16 +56,16 @@ function Chat() {
         if (currentContact != null) {
             fetchData();
         }
-    },[currentContact])
+    }, [currentContact])
 
     useEffect(() => {
         events((message) => {
-            let chat : ChatState = JSON.parse(message);
+            let chat: ChatState = JSON.parse(message);
             setChats({
                 type: "addChat", payload: chat
             })
         });
-    },[]);
+    }, []);
 
     useEffect(() => {
         fetchContacts();
@@ -93,7 +93,7 @@ function Chat() {
 
     }, [contactsResponse, setContacts, setContactResponse]);
 
-    function generateGroupName(firstUser: string, secondUser:  string) {
+    function generateGroupName(firstUser: string, secondUser: string) {
         let sortedStrings: string[] = [firstUser, secondUser].sort();
         let newString: string = sortedStrings.join(" ");
 
@@ -127,7 +127,7 @@ function Chat() {
                 <aside className="chat__sidebar">
                     <header className="chat__header">
                         <h1>Contacts {" - " + user.firstName}</h1>
-                        
+
                     </header>
                     <main className="chats__aside-contacts">
                         {contacts.length &&
@@ -144,7 +144,7 @@ function Chat() {
                 </aside>
                 <main className="chat__main">
                     <header className="chat__header">
-                        <h1>{ currentContact && currentContact?.firstName || ""}</h1>
+                        <h1>{currentContact && currentContact?.firstName || ""}</h1>
                     </header>
 
                     <main className="chat__messages">
@@ -165,16 +165,14 @@ function Chat() {
                                         ))}
                                     </>
                                 );
-                            } else {
-                                return <h4> Select a user to message </h4>;
                             }
                         })()}
                     </main>
 
-                        {(() => {
-                            if (currentContact != null) {
-                                return (
-                                    <footer className="chat__footer">
+                    {(() => {
+                        if (currentContact != null) {
+                            return (
+                                <footer className="chat__footer">
                                     <>
                                         <form onSubmit={formSubmit}>
                                             <input
@@ -194,12 +192,12 @@ function Chat() {
                                             >
                                                 Send
                                             </Button>
-                                        </form> 
-                                        </>
-                                    </footer>
-                                )
-                            }
-                        })()}
+                                        </form>
+                                    </>
+                                </footer>
+                            )
+                        }
+                    })()}
                 </main>
             </section>
         </div>

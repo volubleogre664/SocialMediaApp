@@ -10,7 +10,7 @@
     max-width: 70%;
     height: fit-content;
     color: #fff;
-    background-color: #000;
+    background-color: #36454f;
     margin-left: auto;
     border-radius: 5px;
     padding: 10px;
@@ -18,7 +18,7 @@
 
 .message.received p {
     margin-left: 0;
-    background-color: #474747;
+    background-color: #999898;
 }
 
 .message small {

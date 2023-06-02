@@ -2,7 +2,7 @@
     width: 100%;
     height: fit-content;
     padding: 10px;
-    background-color: #3f3b3b;
+    background-color: #1976d2;
     margin: 0;
     display: flex;
     box-sizing: border-box;
@@ -17,11 +17,13 @@
     gap: 15px;
 }
 
+.header__logo a,
 .header__nav a {
     text-decoration: none;
     color: white;
 }
 
+.header__logo a:hover,
 .header__nav a:hover {
-    color: #5776a5;
+    color: black;
 }
