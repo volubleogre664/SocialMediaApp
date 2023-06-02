@@ -176,8 +176,6 @@ function PostForm() {
                     </Button>
                 </CardActions>
             </Card>
-            <div></div>
-            <MediaUpload mediaFileGetter={(file: File) => setMediaFile(file)} />
         </div>
     );
 }

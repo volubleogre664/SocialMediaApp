@@ -10,7 +10,7 @@ import {
     addPost,
     addLike,
 } from "../context/slices/postSlice";
-import { setChats, addChat } from "../context/slices/chatsSlice";
+import { setChats, addChat, setCurrentContact } from "../context/slices/chatsSlice";
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 const useAppDispatch: () => AppDispatch = useDispatch;
@@ -95,6 +95,7 @@ const useContacts = () => {
 
 const useChats = () => {
     const chats = useAppSelector((state) => state.chats.chats);
+    const currentContact = useAppSelector((state) => state.chats.currentContact);
     const dispatchChats = useAppDispatch();
 
     type ChatsDispatch = {
@@ -110,12 +111,15 @@ const useChats = () => {
             case "addChat":
                 dispatchChats(addChat(payload));
                 break;
+            case "setCurrentContact":
+                dispatchChats(setCurrentContact(payload));
+                break;
             default:
                 break;
         }
     };
 
-    return { chats, dispatch };
+    return { chats, dispatch, currentContact };
 };
 
 export { useUser, useContacts, useChats, usePosts };
