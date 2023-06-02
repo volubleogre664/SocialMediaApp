@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import PostForm from "../components/PostForm";
 import Post from "../components/Post";
 import useFetch from "../hooks/useFetch";
-import { usePosts } from "../hooks/stateHooks";
+import { usePosts, useUser } from "../hooks/stateHooks";
 import { PostState } from "../utils/Types";
 import Search from "../components/Search";
 
@@ -13,6 +13,7 @@ import "../styles/pages/Home.css";
 
 function Home() {
     const { posts, dispatch: setPosts } = usePosts();
+    const { user } = useUser();
     const navigate = useNavigate();
 
     const { response, loading, error, fetchData, setResponse } = useFetch<
@@ -41,7 +42,7 @@ function Home() {
             <div className="home__container">
                 <Search />
                 <h1>This is the Home page</h1>
-                <PostForm />
+                {user != null && <PostForm />}
                 <main className="home__main">
                     {posts.map((post: PostState) => (
                         <Post
