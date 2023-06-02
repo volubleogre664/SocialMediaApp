@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -10,11 +10,14 @@ import { PostState } from "../utils/Types";
 import Search from "../components/Search";
 
 import "../styles/pages/Home.css";
+import { IconButton } from "@mui/material";
+import SearchIcon from '@mui/icons-material/Search';
 
 function Home() {
     const { posts, dispatch: setPosts } = usePosts();
     const { user } = useUser();
     const navigate = useNavigate();
+    const [showSearch, setShowSearch] = useState(false);
 
     const { response, loading, error, fetchData, setResponse } = useFetch<
         PostState[]
@@ -22,6 +25,10 @@ function Home() {
         url: "POSTS",
         method: "GET",
     });
+
+    function toggleSearch(state: boolean) {
+        setShowSearch(state);
+    }
 
     useEffect(() => {
         fetchData();
@@ -40,8 +47,10 @@ function Home() {
     return (
         <div className="home">
             <div className="home__container">
-                <Search />
-                <h1>This is the Home page</h1>
+                <IconButton onClick={() => toggleSearch(!showSearch)}>
+                    <SearchIcon color="primary" />
+                </IconButton>
+                {showSearch && <Search closeSearch={() => toggleSearch(false)} />}
                 {user != null && <PostForm />}
                 <main className="home__main">
                     {posts.map((post: PostState) => (

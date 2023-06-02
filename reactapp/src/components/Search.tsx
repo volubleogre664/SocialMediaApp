@@ -29,7 +29,11 @@ interface UserProfile {
     avatarUrl: string;
 }
 
-const SearchComponent = () => {
+interface SearchComponentProps {
+    closeSearch: Function;
+}
+
+function SearchComponent({ closeSearch }: SearchComponentProps) {
     const [keyword, setKeyword] = useState("");
     const [results, setResults] = useState<SearchResult[]>([]);
     const [userProfiles, setUserProfiles] = useState<UserProfile[]>([]);
@@ -127,6 +131,7 @@ const SearchComponent = () => {
                                     onClick={() => {
                                         viewPost(result.postId);
                                         handleResultClick();
+                                        closeSearch();
                                     }}
                                     sx={{
                                         display: "flex",
@@ -148,8 +153,8 @@ const SearchComponent = () => {
                                         primary={
                                             userProfile
                                                 ? userProfile.firstName +
-                                                  " " +
-                                                  userProfile.lastName
+                                                " " +
+                                                userProfile.lastName
                                                 : ""
                                         }
                                         secondary={
