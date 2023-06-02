@@ -55,9 +55,15 @@
         }
 
         [HttpGet]
-        public IActionResult Get()
+        [Authorize]
+        public IActionResult Get(string? userId)
         {
             var users = this.userService.GetAll();
+            if (userId != null)
+            {
+                users = users.Where(_ => _.AuthUserId != userId).ToList();
+            }
+
             return this.Ok(users);
         }
     }
