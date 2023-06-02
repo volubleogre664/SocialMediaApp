@@ -50,7 +50,7 @@ const SearchComponent = () => {
                     params: { keyword: newKeyword },
                 }
             );
-            //console.log(response.data)
+            console.log(response.data)
             setResults(response.data);
         } catch (error) {
             console.error(error);
@@ -63,7 +63,7 @@ const SearchComponent = () => {
                 "https://localhost:7285/api/user/Get"
             );
             setUserProfiles(response.data);
-            //console.log(response.data);
+            console.log(response.data);
         } catch (error) {
             console.error(error);
         }
@@ -85,7 +85,7 @@ const SearchComponent = () => {
         const userProfile = userProfiles.find(
             (profile) => profile.userId === userId
         );
-        //console.log(userId);
+        console.log(userId);
         return userProfile || null;
     };
 

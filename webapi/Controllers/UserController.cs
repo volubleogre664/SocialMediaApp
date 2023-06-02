@@ -55,7 +55,6 @@
         }
 
         [HttpGet]
-        [Authorize]
         public IActionResult Get(string? userId)
         {
             var users = this.userService.GetAll();
